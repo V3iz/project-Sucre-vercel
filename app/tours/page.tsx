@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { SafeLink as Link } from "@/components/safe-link"
 import Image from "next/image"
-import { Navigation } from "@/components/navigation"
 import { Badge } from "@/components/ui/badge"
 import {
   MapPin,
@@ -408,8 +407,6 @@ export default function ToursPage() {
 
   return (
     <>
-      <Navigation />
-
       <main className="pt-16 lg:pt-20 min-h-screen bg-background">
 
         {/* ── Hero banner ── */}

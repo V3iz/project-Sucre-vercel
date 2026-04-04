@@ -4,20 +4,22 @@ import { useState, useEffect, useRef } from "react"
 import { SafeLink as Link } from "@/components/safe-link"
 import { Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useI18n } from "@/lib/i18n"
 
-const navLinks = [
-  { href: "/", label: "Inicio" },
-  { href: "/experiencias", label: "Experiencias" },
-  { href: "/tours", label: "Tours" },
-  { href: "/alojamiento", label: "Alojamiento" },
-  { href: "/gastronomia", label: "Gastronomia" },
-  { href: "/blog", label: "Blog" },
-  { href: "/contacto", label: "Contacto" },
-]
+const navHrefs = [
+  { href: "/", key: "inicio" },
+  { href: "/experiencias", key: "experiencias" },
+  { href: "/tours", key: "tours" },
+  { href: "/alojamiento", key: "alojamiento" },
+  { href: "/gastronomia", key: "gastronomia" },
+  { href: "/blog", key: "blog" },
+  { href: "/contacto", key: "contacto" },
+] as const
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+  const { language, setLanguage, t } = useI18n()
 
   // Close on outside click
   useEffect(() => {
@@ -62,31 +64,53 @@ export function Navigation() {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-8" aria-label="Navegación principal">
-            {navLinks.map((link) => (
+            {navHrefs.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200"
               >
-                {link.label}
+                {t.nav[link.key]}
               </Link>
             ))}
           </nav>
 
           {/* Desktop CTA */}
-          <div className="hidden lg:flex items-center gap-4">
-            <button
-              type="button"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors px-2 py-1"
-              aria-label="Cambiar idioma"
-            >
-              ES
-            </button>
+          <div className="hidden lg:flex items-center gap-3">
+            {/* Language toggle */}
+            <div className="flex items-center rounded-full border border-border bg-secondary overflow-hidden text-xs font-semibold">
+              <button
+                type="button"
+                onClick={() => setLanguage("es")}
+                aria-pressed={language === "es"}
+                className={cn(
+                  "px-3 py-1.5 transition-colors",
+                  language === "es"
+                    ? "bg-primary text-white"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                ES
+              </button>
+              <button
+                type="button"
+                onClick={() => setLanguage("en")}
+                aria-pressed={language === "en"}
+                className={cn(
+                  "px-3 py-1.5 transition-colors",
+                  language === "en"
+                    ? "bg-primary text-white"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                EN
+              </button>
+            </div>
             <Link
               href="/checkout"
               className="inline-flex items-center justify-center rounded-md text-sm font-semibold h-9 px-4 bg-primary hover:bg-primary/85 text-white transition-colors shadow-sm"
             >
-              Reservar Ahora
+              {t.nav.reservar}
             </Link>
           </div>
 
@@ -121,22 +145,56 @@ export function Navigation() {
         aria-hidden={!isOpen}
       >
         <nav className="flex flex-col p-6 gap-1" aria-label="Navegación movil">
-          {navLinks.map((link) => (
+          {navHrefs.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setIsOpen(false)}
               className="text-base font-medium text-foreground hover:text-primary transition-colors py-3 border-b border-border last:border-0"
             >
-              {link.label}
+              {t.nav[link.key]}
             </Link>
           ))}
+          {/* Language toggle mobile */}
+          <div className="flex items-center gap-2 pt-4">
+            <span className="text-xs text-muted-foreground font-medium">
+              {language === "es" ? "Idioma" : "Language"}:
+            </span>
+            <div className="flex items-center rounded-full border border-border bg-secondary overflow-hidden text-xs font-semibold">
+              <button
+                type="button"
+                onClick={() => setLanguage("es")}
+                aria-pressed={language === "es"}
+                className={cn(
+                  "px-3 py-1.5 transition-colors",
+                  language === "es"
+                    ? "bg-primary text-white"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                ES
+              </button>
+              <button
+                type="button"
+                onClick={() => setLanguage("en")}
+                aria-pressed={language === "en"}
+                className={cn(
+                  "px-3 py-1.5 transition-colors",
+                  language === "en"
+                    ? "bg-primary text-white"
+                    : "text-muted-foreground hover:text-foreground"
+                )}
+              >
+                EN
+              </button>
+            </div>
+          </div>
           <Link
             href="/checkout"
             onClick={() => setIsOpen(false)}
-            className="mt-6 w-full inline-flex items-center justify-center rounded-md text-sm font-semibold h-11 px-4 bg-primary hover:bg-primary/85 text-white transition-colors shadow-sm"
+            className="mt-4 w-full inline-flex items-center justify-center rounded-md text-sm font-semibold h-11 px-4 bg-primary hover:bg-primary/85 text-white transition-colors shadow-sm"
           >
-            Reservar Ahora
+            {t.nav.reservar}
           </Link>
         </nav>
       </div>
