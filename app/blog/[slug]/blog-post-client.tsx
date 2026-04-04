@@ -24,6 +24,21 @@ import {
   getRelatedPosts,
 } from "@/lib/blog-data"
 
+const MONTHS_ES = [
+  "ene", "feb", "mar", "abr", "may", "jun",
+  "jul", "ago", "sep", "oct", "nov", "dic",
+]
+const MONTHS_LONG_ES = [
+  "enero", "febrero", "marzo", "abril", "mayo", "junio",
+  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
+]
+
+function formatDate(iso: string, long = false): string {
+  const [year, month, day] = iso.split("-").map(Number)
+  const m = long ? MONTHS_LONG_ES[month - 1] : MONTHS_ES[month - 1]
+  return `${day} ${m} ${year}`
+}
+
 // ─── Rating Widget ────────────────────────────────────────────────────────────
 
 function RatingWidget({
@@ -251,11 +266,7 @@ function CommentsSection({ initial }: { initial: Comment[] }) {
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
                   <span className="font-semibold text-sm text-foreground">{c.author}</span>
                   <span className="text-xs text-muted-foreground">
-                    {new Date(c.date).toLocaleDateString("es-BO", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })}
+                    {formatDate(c.date)}
                   </span>
                 </div>
                 <div className="flex items-center gap-0.5 mb-2">
@@ -393,11 +404,7 @@ export function BlogPostClient({ post }: { post: BlogPost }) {
               dateTime={post.publishedAt}
               className="text-xs text-muted-foreground"
             >
-              {new Date(post.publishedAt).toLocaleDateString("es-BO", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
+              {formatDate(post.publishedAt, true)}
             </time>
           </div>
 

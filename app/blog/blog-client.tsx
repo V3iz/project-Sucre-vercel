@@ -19,6 +19,16 @@ import {
 } from "lucide-react"
 import { blogPosts, categoryMeta, type BlogCategory } from "@/lib/blog-data"
 
+const MONTHS_ES = [
+  "ene", "feb", "mar", "abr", "may", "jun",
+  "jul", "ago", "sep", "oct", "nov", "dic",
+]
+
+function formatDate(iso: string): string {
+  const [year, month, day] = iso.split("-").map(Number)
+  return `${day} ${MONTHS_ES[month - 1]} ${year}`
+}
+
 // ─── Category filter config ───────────────────────────────────────────────────
 
 const categoryFilters: {
@@ -79,11 +89,7 @@ function BlogCard({ post }: { post: (typeof blogPosts)[number] }) {
           </span>
           <span>·</span>
           <time dateTime={post.publishedAt}>
-            {new Date(post.publishedAt).toLocaleDateString("es-BO", {
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-            })}
+            {formatDate(post.publishedAt)}
           </time>
         </div>
 
