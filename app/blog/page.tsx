@@ -1,4 +1,3 @@
-import { Navigation } from "@/components/navigation"
 import { BlogClient } from "./blog-client"
 import type { Metadata } from "next"
 
@@ -10,9 +9,7 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   return (
-    <>
-      <Navigation />
-      <main className="pt-16 lg:pt-20 min-h-screen bg-background">
+    <main className="pt-16 lg:pt-20 min-h-screen bg-background">
 
         {/* Hero banner */}
         <section className="relative bg-foreground text-white py-16 px-4">
@@ -66,6 +63,5 @@ export default function BlogPage() {
 
         <BlogClient />
       </main>
-    </>
   )
 }

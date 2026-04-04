@@ -1,4 +1,3 @@
-import { Navigation } from "@/components/navigation"
 import { GastronomiaClient } from "./gastronomia-client"
 import type { Metadata } from "next"
 
@@ -10,9 +9,7 @@ export const metadata: Metadata = {
 
 export default function GastronomiaPage() {
   return (
-    <>
-      <Navigation />
-      <main className="pt-16 lg:pt-20 min-h-screen bg-background">
+    <main className="pt-16 lg:pt-20 min-h-screen bg-background">
 
         {/* ── Hero banner ── */}
         <section className="relative bg-foreground text-white py-16 px-4">
@@ -69,6 +66,5 @@ export default function GastronomiaPage() {
 
         <GastronomiaClient />
       </main>
-    </>
   )
 }

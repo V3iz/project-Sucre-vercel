@@ -1,4 +1,3 @@
-import { Navigation } from "@/components/navigation"
 import { BlogPostClient } from "./blog-post-client"
 import { blogPosts, getPostBySlug } from "@/lib/blog-data"
 import { notFound } from "next/navigation"
@@ -28,11 +27,8 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) notFound()
 
   return (
-    <>
-      <Navigation />
-      <main className="pt-16 lg:pt-20 min-h-screen bg-background">
-        <BlogPostClient post={post} />
-      </main>
-    </>
+    <main className="pt-16 lg:pt-20 min-h-screen bg-background">
+      <BlogPostClient post={post} />
+    </main>
   )
 }
