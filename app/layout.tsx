@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Playfair_Display, Inter } from 'next/font/google'
 import { Navigation } from '@/components/navigation'
+import { I18nProvider } from '@/lib/i18n'
 import './globals.css'
 
 const playfair = Playfair_Display({ 
@@ -53,8 +54,10 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={`${playfair.variable} ${inter.variable} font-sans antialiased`}>
-        <Navigation />
-        {children}
+        <I18nProvider>
+          <Navigation />
+          {children}
+        </I18nProvider>
       </body>
     </html>
   )

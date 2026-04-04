@@ -4,18 +4,7 @@ import { useState, useMemo } from "react"
 import { SafeLink as Link } from "@/components/safe-link"
 import { Search, MapPin, Clock, Compass, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
-
-const experienceTypes = [
-  { value: "cultura", label: "Cultura" },
-  { value: "naturaleza", label: "Naturaleza" },
-  { value: "gastronomia", label: "Gastronomia" },
-]
-
-const durationOptions = [
-  { value: "fin-de-semana", label: "Fin de semana" },
-  { value: "semana-completa", label: "Semana completa" },
-  { value: "nomada-digital", label: "Nomada Digital" },
-]
+import { useI18n } from "@/lib/i18n"
 
 function NativeSelect({
   value,
@@ -52,6 +41,8 @@ function NativeSelect({
 export function Hero() {
   const [experienceType, setExperienceType] = useState("")
   const [duration, setDuration] = useState("")
+  const { t } = useI18n()
+  const h = t.hero
 
   const exploreHref = useMemo(() => {
     const params = new URLSearchParams()
@@ -78,18 +69,18 @@ export function Hero() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/80 backdrop-blur-sm border border-border mb-8">
             <MapPin className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-secondary-foreground">
-              Patrimonio de la Humanidad UNESCO
+              {h.badge}
             </span>
           </div>
 
           {/* Main Title */}
           <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground leading-tight mb-6 text-balance">
-            Sucre: El Corazon Historico y Cultural de Bolivia
+            {h.title}
           </h1>
 
           {/* Subtitle */}
           <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed text-pretty">
-            Descubre la capital del patrimonio, la gastronomia y el turismo sostenible
+            {h.subtitle}
           </p>
         </div>
       </div>
@@ -103,13 +94,13 @@ export function Hero() {
               <div className="space-y-2">
                 <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                   <Compass className="w-4 h-4" />
-                  Tipo de Experiencia
+                  {h.experienceLabel}
                 </label>
                 <NativeSelect
                   value={experienceType}
                   onChange={setExperienceType}
-                  placeholder="Selecciona una experiencia"
-                  options={experienceTypes}
+                  placeholder={h.experiencePlaceholder}
+                  options={h.experienceTypes}
                 />
               </div>
 
@@ -117,13 +108,13 @@ export function Hero() {
               <div className="space-y-2">
                 <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                   <Clock className="w-4 h-4" />
-                  Duracion
+                  {h.durationLabel}
                 </label>
                 <NativeSelect
                   value={duration}
                   onChange={setDuration}
-                  placeholder="Selecciona duracion"
-                  options={durationOptions}
+                  placeholder={h.durationPlaceholder}
+                  options={h.durationOptions}
                 />
               </div>
 
@@ -134,7 +125,7 @@ export function Hero() {
                   className="w-full h-12 inline-flex items-center justify-center gap-2 rounded-md bg-primary hover:bg-primary/85 text-white text-base font-semibold transition-colors shadow-sm"
                 >
                   <Search className="w-5 h-5" />
-                  Explorar Destino
+                  {h.cta}
                 </Link>
               </div>
             </div>
