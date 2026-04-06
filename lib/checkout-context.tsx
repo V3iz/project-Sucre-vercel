@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, ReactNode } from "react"
+import { createContext, useContext, useState, useEffect, ReactNode } from "react"
 import { BookingItem, CustomerInfo, PaymentInfo, BookingState, TransportInfo } from "./checkout-types"
 
 interface CheckoutContextType {
@@ -8,24 +8,18 @@ interface CheckoutContextType {
   addItem: (item: BookingItem) => void
   removeItem: (id: string) => void
   updateQuantity: (id: string, quantity: number) => void
+  updateTravelers: (id: string, adults: number, children: number) => void
   setCustomerInfo: (info: CustomerInfo) => void
   setPaymentInfo: (info: PaymentInfo) => void
   setStep: (step: BookingState['step']) => void
   applyPromoCode: (code: string) => void
   clearBooking: () => void
   setTransport: (transport: TransportInfo) => void
+  initializeFromStorage: () => void
 }
 
 const initialState: BookingState = {
-  items: [
-    {
-      id: "ruta-sabores",
-      name: "Ruta de los Sabores",
-      category: "Gastronómico",
-      pricePerPerson: 95,
-      quantity: 2,
-    }
-  ],
+  items: [],
   customer: null,
   payment: null,
   step: 'details',
@@ -61,6 +55,34 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
     }))
   }
 
+  const updateTravelers = (id: string, adults: number, children: number) => {
+    setState(prev => ({
+      ...prev,
+      items: prev.items.map(item => 
+        item.id === id ? { ...item, adults, children, quantity: adults + children } : item
+      )
+    }))
+  }
+
+  const initializeFromStorage = () => {
+    if (typeof window !== 'undefined') {
+      const stored = sessionStorage.getItem('pendingBooking')
+      if (stored) {
+        try {
+          const item = JSON.parse(stored) as BookingItem
+          setState(prev => ({
+            ...prev,
+            items: [item],
+            step: 'details'
+          }))
+          sessionStorage.removeItem('pendingBooking')
+        } catch (e) {
+          console.error('Error parsing booking data:', e)
+        }
+      }
+    }
+  }
+
   const setCustomerInfo = (info: CustomerInfo) => {
     setState(prev => ({ ...prev, customer: info }))
   }
@@ -93,12 +115,14 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
       addItem,
       removeItem,
       updateQuantity,
+      updateTravelers,
       setCustomerInfo,
       setPaymentInfo,
       setStep,
       applyPromoCode,
       clearBooking,
       setTransport,
+      initializeFromStorage,
     }}>
       {children}
     </CheckoutContext.Provider>

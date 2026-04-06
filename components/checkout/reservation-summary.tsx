@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Minus, Plus, Trash2, Tag, Shield, Leaf, Bus, Plane, X } from "lucide-react"
+import { Minus, Plus, Trash2, Tag, Shield, Leaf, Bus, Plane, Users, Baby } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -43,50 +43,63 @@ export function ReservationSummary() {
       <CardContent className="space-y-4">
         {/* Booking Items */}
         <div className="space-y-3">
-          {state.items.map((item) => (
-            <div key={item.id} className="bg-secondary/50 rounded-lg p-3">
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <h4 className="font-medium text-foreground text-sm">{item.name}</h4>
-                  <p className="text-xs text-muted-foreground">{item.category}</p>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6 text-muted-foreground hover:text-destructive"
-                  onClick={() => removeItem(item.id)}
-                  aria-label={summary.remove}
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                </Button>
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 bg-background rounded-md border">
+          {state.items.map((item) => {
+            const adultPrice = item.pricePerPerson * item.adults
+            const childPrice = (item.pricePerChild ?? item.pricePerPerson * 0.5) * item.children
+            const itemTotal = adultPrice + childPrice
+
+            return (
+              <div key={item.id} className="bg-secondary/50 rounded-lg p-3">
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <h4 className="font-medium text-foreground text-sm">{item.name}</h4>
+                    <p className="text-xs text-muted-foreground">{item.category}</p>
+                    {item.date && (
+                      <p className="text-xs text-primary mt-1">{item.date}</p>
+                    )}
+                  </div>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7"
-                    onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                    className="h-6 w-6 text-muted-foreground hover:text-destructive"
+                    onClick={() => removeItem(item.id)}
+                    aria-label={summary.remove}
                   >
-                    <Minus className="h-3 w-3" />
-                  </Button>
-                  <span className="text-sm font-medium w-6 text-center">{item.quantity}</span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7"
-                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                  >
-                    <Plus className="h-3 w-3" />
+                    <Trash2 className="h-3.5 w-3.5" />
                   </Button>
                 </div>
-                <span className="font-semibold text-foreground">
-                  ${(item.pricePerPerson * item.quantity).toFixed(2)}
-                </span>
+                
+                {/* Travelers breakdown */}
+                <div className="space-y-1.5 mb-3">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="flex items-center gap-1.5 text-muted-foreground">
+                      <Users className="h-3 w-3" />
+                      {item.adults} adulto{item.adults !== 1 ? 's' : ''} x ${item.pricePerPerson}
+                    </span>
+                    <span className="text-foreground">${adultPrice.toFixed(2)}</span>
+                  </div>
+                  {item.children > 0 && (
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="flex items-center gap-1.5 text-muted-foreground">
+                        <Baby className="h-3 w-3" />
+                        {item.children} nino{item.children !== 1 ? 's' : ''} x ${item.pricePerChild ?? item.pricePerPerson * 0.5}
+                      </span>
+                      <span className="text-foreground">${childPrice.toFixed(2)}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between pt-2 border-t border-border">
+                  <span className="text-xs text-muted-foreground">
+                    {item.adults + item.children} viajero{(item.adults + item.children) !== 1 ? 's' : ''}
+                  </span>
+                  <span className="font-semibold text-foreground">
+                    ${itemTotal.toFixed(2)}
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
         {/* Promo Code */}

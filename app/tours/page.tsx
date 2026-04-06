@@ -4,6 +4,7 @@ import { useState } from "react"
 import { SafeLink as Link } from "@/components/safe-link"
 import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
+import { BookingModal } from "@/components/booking-modal"
 import {
   MapPin,
   Clock,
@@ -221,7 +222,7 @@ const tours: Tour[] = [
 
 // ─── Tour Card ────────────────────────────────────────────────────────────────
 
-function TourCard({ tour }: { tour: Tour }) {
+function TourCard({ tour, onBook }: { tour: Tour; onBook: (tour: Tour) => void }) {
   const [expanded, setExpanded] = useState(false)
 
   return (
@@ -338,13 +339,13 @@ function TourCard({ tour }: { tour: Tour }) {
               </span>
             </p>
           </div>
-          <Link
-            href="/checkout"
+          <button
+            onClick={() => onBook(tour)}
             className="inline-flex items-center gap-1.5 bg-primary hover:bg-primary/85 text-white text-sm font-semibold px-4 py-2 rounded-md transition-colors"
           >
             Reservar
             <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+          </button>
         </div>
       </div>
     </article>
@@ -353,7 +354,7 @@ function TourCard({ tour }: { tour: Tour }) {
 
 // ─── Featured Banner ──────────────────────────────────────────────────────────
 
-function FeaturedTour({ tour }: { tour: Tour }) {
+function FeaturedTour({ tour, onBook }: { tour: Tour; onBook: (tour: Tour) => void }) {
   return (
     <div className="relative rounded-xl overflow-hidden border border-border shadow-sm h-72 lg:h-80 flex items-end">
       <Image
@@ -383,12 +384,12 @@ function FeaturedTour({ tour }: { tour: Tour }) {
         </div>
         <div className="flex flex-col items-start sm:items-end gap-2 shrink-0">
           <p className="text-white text-2xl font-bold font-serif">${tour.price}<span className="text-sm font-normal text-white/60 ml-1">/ pers.</span></p>
-          <Link
-            href="/checkout"
+          <button
+            onClick={() => onBook(tour)}
             className="inline-flex items-center gap-2 bg-primary hover:bg-primary/85 text-white font-semibold px-5 py-2.5 rounded-md transition-colors text-sm whitespace-nowrap"
           >
             Reservar ahora <ArrowRight className="w-4 h-4" />
-          </Link>
+          </button>
         </div>
       </div>
     </div>
@@ -399,6 +400,13 @@ function FeaturedTour({ tour }: { tour: Tour }) {
 
 export default function ToursPage() {
   const [activeCategory, setActiveCategory] = useState<TourCategory | "todos">("todos")
+  const [selectedTour, setSelectedTour] = useState<Tour | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const handleBookTour = (tour: Tour) => {
+    setSelectedTour(tour)
+    setIsModalOpen(true)
+  }
 
   const featured = tours.filter((t) => t.featured)
   const filtered = tours.filter(
@@ -470,7 +478,7 @@ export default function ToursPage() {
             </h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
               {featured.map((tour) => (
-                <FeaturedTour key={tour.id} tour={tour} />
+                <FeaturedTour key={tour.id} tour={tour} onBook={handleBookTour} />
               ))}
             </div>
           </section>
@@ -518,7 +526,7 @@ export default function ToursPage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map((tour) => (
-                <TourCard key={tour.id} tour={tour} />
+                <TourCard key={tour.id} tour={tour} onBook={handleBookTour} />
               ))}
             </div>
           )}
@@ -536,21 +544,36 @@ export default function ToursPage() {
             </p>
             <div className="flex items-center justify-center gap-3 mt-6 flex-wrap">
               <Link
-                href="/checkout"
+                href="/contacto"
                 className="inline-flex items-center gap-2 bg-primary hover:bg-primary/85 text-white font-semibold px-6 py-2.5 rounded-md transition-colors text-sm"
               >
-                Reservar tour <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/contacto"
-                className="inline-flex items-center gap-2 border border-primary text-primary hover:bg-secondary font-semibold px-6 py-2.5 rounded-md transition-colors text-sm"
-              >
-                Solicitar tour privado
+                Solicitar cotizacion <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
         </section>
       </main>
+
+      {/* Booking Modal */}
+      {selectedTour && (
+        <BookingModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false)
+            setSelectedTour(null)
+          }}
+          item={{
+            id: selectedTour.id,
+            name: selectedTour.title,
+            subtitle: selectedTour.subtitle,
+            category: selectedTour.categoryLabel,
+            price: selectedTour.price,
+            image: selectedTour.image,
+            duration: selectedTour.duration,
+            maxGroup: selectedTour.maxGroup,
+          }}
+        />
+      )}
     </>
   )
 }

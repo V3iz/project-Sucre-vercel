@@ -1,9 +1,11 @@
 "use client"
 
+import { useState } from "react"
 import { Check, Leaf, CalendarCheck, Church, UtensilsCrossed, Mountain, Star, Users, Clock, MapPin, Info } from "lucide-react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { SafeLink as Link } from "@/components/safe-link"
+import { BookingModal } from "@/components/booking-modal"
 import { useI18n } from "@/lib/i18n"
 
 const icons = [
@@ -25,9 +27,36 @@ const categoryColors: Record<string, string> = {
   "Alternative": "bg-emerald-100 text-emerald-700",
 }
 
+interface SelectedExperience {
+  id: string
+  name: string
+  category: string
+  price: number
+  duration: string
+  maxGroup: number
+}
+
 export function ExperienceComparator() {
   const { t } = useI18n()
   const exp = t.experiences
+  const [selectedExp, setSelectedExp] = useState<SelectedExperience | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const handleBook = (card: typeof exp.cards[0], price: number) => {
+    // Extract max group from string like "2-8 personas"
+    const groupMatch = card.groupSize.match(/(\d+)-(\d+)/)
+    const maxGroup = groupMatch ? parseInt(groupMatch[2]) : 10
+
+    setSelectedExp({
+      id: card.id,
+      name: card.name,
+      category: card.category,
+      price,
+      duration: card.duration,
+      maxGroup,
+    })
+    setIsModalOpen(true)
+  }
 
   return (
     <section className="py-20 bg-cream-50">
@@ -154,12 +183,12 @@ export function ExperienceComparator() {
                     <Info className="h-4 w-4" />
                     {exp.viewDetails}
                   </Link>
-                  <Link 
-                    href="/checkout"
+                  <button 
+                    onClick={() => handleBook(card, prices[index])}
                     className="w-full h-10 inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors bg-primary hover:bg-primary/80 text-white"
                   >
                     {exp.bookNow}
-                  </Link>
+                  </button>
                 </CardFooter>
 
                 {/* Trust Micro-badges */}
@@ -197,6 +226,25 @@ export function ExperienceComparator() {
           </Link>
         </div>
       </div>
+
+      {/* Booking Modal */}
+      {selectedExp && (
+        <BookingModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false)
+            setSelectedExp(null)
+          }}
+          item={{
+            id: selectedExp.id,
+            name: selectedExp.name,
+            category: selectedExp.category,
+            price: selectedExp.price,
+            duration: selectedExp.duration,
+            maxGroup: selectedExp.maxGroup,
+          }}
+        />
+      )}
     </section>
   )
 }

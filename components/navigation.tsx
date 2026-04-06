@@ -107,7 +107,7 @@ export function Navigation() {
               </button>
             </div>
             <Link
-              href="/checkout"
+              href="/tours"
               className="inline-flex items-center justify-center rounded-md text-sm font-semibold h-9 px-4 bg-primary hover:bg-primary/85 text-white transition-colors shadow-sm"
             >
               {t.nav.reservar}
@@ -190,7 +190,7 @@ export function Navigation() {
             </div>
           </div>
           <Link
-            href="/checkout"
+            href="/tours"
             onClick={() => setIsOpen(false)}
             className="mt-4 w-full inline-flex items-center justify-center rounded-md text-sm font-semibold h-11 px-4 bg-primary hover:bg-primary/85 text-white transition-colors shadow-sm"
           >

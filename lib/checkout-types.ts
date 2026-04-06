@@ -3,8 +3,13 @@ export interface BookingItem {
   name: string
   category: string
   pricePerPerson: number
+  pricePerChild?: number
   quantity: number
+  adults: number
+  children: number
   date?: string
+  image?: string
+  duration?: string
 }
 
 export type TransportType = 'none' | 'ground' | 'air'
@@ -81,7 +86,11 @@ export interface BookingState {
 export const TAX_RATE = 0.13 // 13% IVA Bolivia
 
 export function calculateSubtotal(items: BookingItem[]): number {
-  return items.reduce((sum, item) => sum + item.pricePerPerson * item.quantity, 0)
+  return items.reduce((sum, item) => {
+    const adultPrice = item.pricePerPerson * item.adults
+    const childPrice = (item.pricePerChild ?? item.pricePerPerson * 0.5) * item.children
+    return sum + adultPrice + childPrice
+  }, 0)
 }
 
 export function calculateTaxes(subtotal: number): number {

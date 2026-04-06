@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import { SafeLink as Link } from "@/components/safe-link"
 import { ArrowLeft, Shield, Leaf, CalendarCheck } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
@@ -12,9 +13,46 @@ import { ConfirmationStep } from "@/components/checkout/confirmation-step"
 import { useI18n } from "@/lib/i18n"
 
 function CheckoutContent() {
-  const { state } = useCheckout()
+  const { state, initializeFromStorage } = useCheckout()
   const { t } = useI18n()
   const checkout = t.checkout
+
+  // Initialize booking from sessionStorage on mount
+  React.useEffect(() => {
+    initializeFromStorage()
+  }, [initializeFromStorage])
+
+  // Show loading state while checking for items
+  if (state.items.length === 0 && typeof window !== 'undefined' && sessionStorage.getItem('pendingBooking')) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="h-8 w-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-muted-foreground">Cargando reserva...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Show empty state if no items
+  if (state.items.length === 0) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+        <div className="text-center max-w-md">
+          <h2 className="font-serif text-2xl font-semibold text-foreground mb-2">No hay items en tu reserva</h2>
+          <p className="text-muted-foreground mb-6">Selecciona un tour o experiencia para comenzar tu reserva.</p>
+          <div className="flex gap-3 justify-center">
+            <Link href="/tours" className="inline-flex items-center gap-2 bg-primary hover:bg-primary/85 text-white font-semibold px-6 py-2.5 rounded-md transition-colors text-sm">
+              Ver Tours
+            </Link>
+            <Link href="/experiencias" className="inline-flex items-center gap-2 border border-primary text-primary hover:bg-secondary font-semibold px-6 py-2.5 rounded-md transition-colors text-sm">
+              Ver Experiencias
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-background">

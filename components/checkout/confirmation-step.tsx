@@ -121,17 +121,29 @@ export function ConfirmationStep() {
 
           {/* Items Summary */}
           <div className="space-y-3">
-            {state.items.map((item) => (
-              <div key={item.id} className="flex justify-between items-center">
-                <div>
-                  <p className="font-medium">{item.name}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {item.quantity} {item.quantity === 1 ? (language === "es" ? "persona" : "person") : (language === "es" ? "personas" : "people")}
-                  </p>
+            {state.items.map((item) => {
+              const adultPrice = item.pricePerPerson * item.adults
+              const childPrice = (item.pricePerChild ?? item.pricePerPerson * 0.5) * item.children
+              const itemTotal = adultPrice + childPrice
+
+              return (
+                <div key={item.id} className="flex justify-between items-start">
+                  <div>
+                    <p className="font-medium">{item.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {item.adults} {language === "es" ? "adulto" : "adult"}{item.adults !== 1 ? 's' : ''}
+                      {item.children > 0 && (
+                        <>, {item.children} {language === "es" ? "nino" : "child"}{item.children !== 1 ? 's' : ''}</>
+                      )}
+                    </p>
+                    {item.date && (
+                      <p className="text-sm text-primary">{item.date}</p>
+                    )}
+                  </div>
+                  <span className="font-semibold">${itemTotal.toFixed(2)}</span>
                 </div>
-                <span className="font-semibold">${(item.pricePerPerson * item.quantity).toFixed(2)}</span>
-              </div>
-            ))}
+              )
+            })}
           </div>
 
           <Separator />
