@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { User, Mail, Phone, Globe, MessageSquare, ArrowRight, Shield, CalendarCheck } from "lucide-react"
+import { TransportSelector } from "@/components/checkout/transport-selector"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -183,6 +184,9 @@ export function CustomerDetailsForm() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Transport Selector */}
+      <TransportSelector />
 
       <Button type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90">
         {details.continue}

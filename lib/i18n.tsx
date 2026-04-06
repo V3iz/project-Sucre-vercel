@@ -274,6 +274,32 @@ export const translations = {
         continuePayment: "Continuar al Pago",
         pay: "Pagar",
       },
+      // Transport
+      transport: {
+        title: "¿Necesitas Transporte?",
+        description: "Opcional — añade traslado desde tu punto de origen hasta Sucre",
+        perPerson: "por persona",
+        free: "Sin costo adicional",
+        originLabel: "Ciudad de origen",
+        originPlaceholderGround: "Ej: Potosí, Cochabamba, La Paz...",
+        originPlaceholderAir: "Ej: La Paz (LPB), Santa Cruz (VVI)...",
+        groundNote: "El transporte terrestre incluye bus cama panorámico con salida coordinada desde tu ciudad. Horarios confirmados 48h antes del viaje.",
+        airNote: "El transporte aéreo incluye traslado al aeropuerto + vuelo en aerolínea local. Horarios sujetos a disponibilidad de vuelos.",
+        options: {
+          none: {
+            label: "Sin transporte",
+            description: "Llegaré por mis propios medios a Sucre.",
+          },
+          ground: {
+            label: "Transporte terrestre",
+            description: "Bus cama panorámico con WiFi y comodidades. Rutas disponibles desde las principales ciudades.",
+          },
+          air: {
+            label: "Transporte aéreo",
+            description: "Vuelo en aerolínea local más rápido y cómodo. Incluye traslado al aeropuerto.",
+          },
+        },
+      },
       // Customer Details
       details: {
         title: "Datos del Viajero Principal",
@@ -296,6 +322,7 @@ export const translations = {
         termsAnd: "y la",
         privacyLink: "política de privacidad",
         continue: "Continuar al Pago",
+        required: "Campo requerido",
       },
       // Confirmation
       confirmation: {
@@ -607,6 +634,32 @@ export const translations = {
         continuePayment: "Continue to Payment",
         pay: "Pay",
       },
+      // Transport
+      transport: {
+        title: "Do you need Transport?",
+        description: "Optional — add a transfer from your origin to Sucre",
+        perPerson: "per person",
+        free: "No extra cost",
+        originLabel: "City of origin",
+        originPlaceholderGround: "E.g: Potosí, Cochabamba, La Paz...",
+        originPlaceholderAir: "E.g: La Paz (LPB), Santa Cruz (VVI)...",
+        groundNote: "Ground transport includes a panoramic sleeper bus with departure coordinated from your city. Schedules confirmed 48h before the trip.",
+        airNote: "Air transport includes airport transfer + domestic flight. Schedules subject to flight availability.",
+        options: {
+          none: {
+            label: "No transport",
+            description: "I will arrive in Sucre by my own means.",
+          },
+          ground: {
+            label: "Ground transport",
+            description: "Panoramic sleeper bus with WiFi and amenities. Routes available from major cities.",
+          },
+          air: {
+            label: "Air transport",
+            description: "Domestic airline flight, faster and more comfortable. Includes airport transfer.",
+          },
+        },
+      },
       // Customer Details
       details: {
         title: "Primary Traveler Information",
@@ -629,6 +682,7 @@ export const translations = {
         termsAnd: "and the",
         privacyLink: "privacy policy",
         continue: "Continue to Payment",
+        required: "Required field",
       },
       // Confirmation
       confirmation: {

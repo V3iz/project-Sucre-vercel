@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Minus, Plus, Trash2, Tag, Shield, Leaf } from "lucide-react"
+import { Minus, Plus, Trash2, Tag, Shield, Leaf, Bus, Plane, X } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -19,7 +19,8 @@ export function ReservationSummary() {
 
   const subtotal = calculateSubtotal(state.items)
   const taxes = calculateTaxes(subtotal)
-  const total = calculateTotal(subtotal, taxes, state.discount)
+  const transportPrice = state.transport?.price ?? 0
+  const total = calculateTotal(subtotal, taxes, state.discount, transportPrice)
 
   const handleApplyPromo = () => {
     if (promoInput.trim()) {
@@ -127,6 +128,21 @@ export function ReservationSummary() {
             <div className="flex justify-between text-emerald-600">
               <span>{summary.discount}</span>
               <span>-${state.discount.toFixed(2)} USD</span>
+            </div>
+          )}
+          {transportPrice > 0 && (
+            <div className="flex justify-between items-center">
+              <span className="flex items-center gap-1.5 text-muted-foreground">
+                {state.transport.type === "ground" ? (
+                  <Bus className="h-3.5 w-3.5 text-amber-600" />
+                ) : (
+                  <Plane className="h-3.5 w-3.5 text-sky-600" />
+                )}
+                {t.checkout.transport?.options[state.transport.type as "ground" | "air"]?.label ?? "Transporte"}
+              </span>
+              <span className={state.transport.type === "ground" ? "text-amber-700 font-medium" : "text-sky-700 font-medium"}>
+                +${transportPrice.toFixed(2)} USD
+              </span>
             </div>
           )}
         </div>
