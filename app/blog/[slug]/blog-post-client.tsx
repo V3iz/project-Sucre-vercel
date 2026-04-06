@@ -533,10 +533,10 @@ export function BlogPostClient({ post }: { post: BlogPost }) {
                 Nuestros expertos locales te ayudan a diseñar la experiencia perfecta en Sucre.
               </p>
               <Link
-                href="/checkout"
+                href="/tours"
                 className="block text-center bg-white text-primary font-semibold text-sm py-2 rounded-md hover:bg-white/90 transition-colors"
               >
-                Reservar ahora
+                Explorar tours
               </Link>
             </div>
           </div>

@@ -4,6 +4,7 @@ import { useState } from "react"
 import { SafeLink as Link } from "@/components/safe-link"
 import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
+import { BookingModal } from "@/components/booking-modal"
 import {
   MapPin,
   Clock,
@@ -137,9 +138,13 @@ const experiences = [
   },
 ]
 
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+type Experience = (typeof experiences)[0]
+
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function ExperienceCard({ exp }: { exp: (typeof experiences)[0] }) {
+function ExperienceCard({ exp, onBook }: { exp: Experience; onBook: (exp: Experience) => void }) {
   return (
     <article className="group bg-card rounded-xl overflow-hidden border border-border shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col">
       {/* Image */}
@@ -228,13 +233,13 @@ function ExperienceCard({ exp }: { exp: (typeof experiences)[0] }) {
               </span>
             </p>
           </div>
-          <Link
-            href="/checkout"
+          <button
+            onClick={() => onBook(exp)}
             className="inline-flex items-center gap-1.5 bg-primary hover:bg-primary/85 text-white text-sm font-semibold px-4 py-2 rounded-md transition-colors"
           >
             Reservar
             <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+          </button>
         </div>
       </div>
     </article>
@@ -247,6 +252,13 @@ export default function ExperienciasPage() {
   const [activeCategory, setActiveCategory] = useState("todas")
   const [activeDuration, setActiveDuration] = useState("todas")
   const [filtersOpen, setFiltersOpen] = useState(false)
+  const [selectedExp, setSelectedExp] = useState<Experience | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const handleBookExperience = (exp: Experience) => {
+    setSelectedExp(exp)
+    setIsModalOpen(true)
+  }
 
   const filtered = experiences.filter((exp) => {
     const catMatch = activeCategory === "todas" || exp.category === activeCategory
@@ -392,7 +404,7 @@ export default function ExperienciasPage() {
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filtered.map((exp) => (
-                  <ExperienceCard key={exp.id} exp={exp} />
+                  <ExperienceCard key={exp.id} exp={exp} onBook={handleBookExperience} />
                 ))}
               </div>
             </>
@@ -411,22 +423,37 @@ export default function ExperienciasPage() {
             </p>
             <div className="flex items-center justify-center gap-3 mt-6 flex-wrap">
               <Link
-                href="/checkout"
+                href="/contacto"
                 className="inline-flex items-center gap-2 bg-primary hover:bg-primary/85 text-white font-semibold px-6 py-2.5 rounded-md transition-colors text-sm"
               >
-                Reservar experiencia
+                Solicitar cotizacion
                 <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/contacto"
-                className="inline-flex items-center gap-2 border border-primary text-primary hover:bg-secondary font-semibold px-6 py-2.5 rounded-md transition-colors text-sm"
-              >
-                Cotizacion personalizada
               </Link>
             </div>
           </div>
         </section>
       </main>
+
+      {/* Booking Modal */}
+      {selectedExp && (
+        <BookingModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false)
+            setSelectedExp(null)
+          }}
+          item={{
+            id: selectedExp.id,
+            name: selectedExp.title,
+            subtitle: selectedExp.subtitle,
+            category: selectedExp.category,
+            price: selectedExp.price,
+            image: selectedExp.image,
+            duration: selectedExp.durationLabel,
+            location: selectedExp.location,
+          }}
+        />
+      )}
     </>
   )
 }

@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { useParams } from "next/navigation"
 import { useI18n } from "@/lib/i18n"
 import { Navigation } from "@/components/navigation"
@@ -7,6 +8,7 @@ import { SafeLink as Link } from "@/components/safe-link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { BookingModal } from "@/components/booking-modal"
 import { 
   Church, 
   UtensilsCrossed, 
@@ -802,6 +804,7 @@ export default function ExperienceDetailPage() {
   const params = useParams()
   const { language } = useI18n()
   const id = params.id as string
+  const [isModalOpen, setIsModalOpen] = useState(false)
   
   const experience = experienceData[language]?.[id as keyof typeof experienceData.es]
   const l = labels[language]
@@ -1086,13 +1089,13 @@ export default function ExperienceDetailPage() {
                     </div>
 
                     <div className="space-y-3">
-                      <Link 
-                        href="/checkout"
+                      <button 
+                        onClick={() => setIsModalOpen(true)}
                         className="w-full h-12 inline-flex items-center justify-center gap-2 rounded-lg text-base font-semibold transition-colors bg-terracotta-500 hover:bg-terracotta-600 text-white"
                       >
                         {l.bookNow}
                         <ChevronRight className="h-5 w-5" />
-                      </Link>
+                      </button>
                       <Button variant="outline" className="w-full h-12 border-terracotta-300 text-terracotta-600 hover:bg-terracotta-50">
                         {l.requestInfo}
                       </Button>
@@ -1140,6 +1143,20 @@ export default function ExperienceDetailPage() {
           </div>
         </div>
       </main>
+
+      {/* Booking Modal */}
+      <BookingModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        item={{
+          id: experience.id,
+          name: experience.name,
+          subtitle: experience.tagline,
+          category: experience.category,
+          price: experience.price,
+          duration: experience.duration,
+        }}
+      />
     </>
   )
 }

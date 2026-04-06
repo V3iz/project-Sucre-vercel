@@ -328,10 +328,10 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
             </p>
           </div>
           <Link
-            href="/checkout"
+            href="/contacto"
             className="inline-flex items-center gap-1.5 bg-primary hover:bg-primary/85 text-white text-sm font-semibold px-4 py-2 rounded-md transition-colors"
           >
-            Reservar
+            Consultar
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
@@ -382,10 +382,10 @@ function FeaturedHotel({ hotel }: { hotel: Hotel }) {
             <span className="text-sm font-normal text-white/60 ml-1">/ noche</span>
           </p>
           <Link
-            href="/checkout"
+            href="/contacto"
             className="inline-flex items-center gap-2 bg-primary hover:bg-primary/85 text-white font-semibold px-5 py-2.5 rounded-md transition-colors text-sm whitespace-nowrap"
           >
-            Reservar ahora <ArrowRight className="w-4 h-4" />
+            Consultar disponibilidad <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>
@@ -571,18 +571,11 @@ export function AlojamientoClient() {
           </p>
           <div className="flex items-center justify-center gap-3 mt-6 flex-wrap">
             <Link
-              href="/checkout"
+              href="/contacto"
               className="inline-flex items-center gap-2 bg-primary hover:bg-primary/85 text-white font-semibold px-6 py-2.5 rounded-md transition-colors text-sm"
             >
-              Reservar alojamiento
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
-              href="/contacto"
-              className="inline-flex items-center gap-2 border border-white/30 text-white hover:border-white font-semibold px-6 py-2.5 rounded-md transition-colors text-sm"
-            >
               <Phone className="w-4 h-4" />
-              Asesoría gratuita
+              Solicitar asesoria gratuita
             </Link>
           </div>
         </div>
