@@ -9,9 +9,12 @@ import { ReservationSummary } from "@/components/checkout/reservation-summary"
 import { CustomerDetailsForm } from "@/components/checkout/customer-details-form"
 import { PaymentForm } from "@/components/checkout/payment-form"
 import { ConfirmationStep } from "@/components/checkout/confirmation-step"
+import { useI18n } from "@/lib/i18n"
 
 function CheckoutContent() {
   const { state } = useCheckout()
+  const { t } = useI18n()
+  const checkout = t.checkout
 
   return (
     <div className="min-h-screen bg-background">
@@ -25,7 +28,7 @@ function CheckoutContent() {
                 className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-3 hover:bg-accent hover:text-accent-foreground transition-colors"
               >
                 <ArrowLeft className="h-4 w-4" />
-                Volver
+                {checkout.back}
               </Link>
               <div className="hidden sm:flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
@@ -37,7 +40,7 @@ function CheckoutContent() {
             <div className="flex items-center gap-3">
               <Badge variant="outline" className="hidden sm:flex bg-emerald-50 text-emerald-700 border-emerald-200">
                 <Shield className="h-3 w-3 mr-1" />
-                Pago Seguro
+                {checkout.securePayment}
               </Badge>
             </div>
           </div>
@@ -79,15 +82,15 @@ function CheckoutContent() {
           <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <Shield className="h-4 w-4 text-emerald-500" />
-              <span>Pago Cifrado SSL</span>
+              <span>{checkout.encryptedSSL}</span>
             </div>
             <div className="flex items-center gap-2">
               <Leaf className="h-4 w-4 text-emerald-500" />
-              <span>Turismo Sostenible</span>
+              <span>{checkout.sustainableTourism}</span>
             </div>
             <div className="flex items-center gap-2">
               <CalendarCheck className="h-4 w-4 text-blue-500" />
-              <span>Cancelacion Flexible</span>
+              <span>{checkout.flexibleCancellation}</span>
             </div>
           </div>
         </div>

@@ -32,11 +32,11 @@ import {
 } from "@/components/ui/dialog"
 import { useCheckout } from "@/lib/checkout-context"
 import { 
-  PaymentMethod, CardPaymentInfo, PayPalPaymentInfo, 
-  QRPaymentInfo, TransferPaymentInfo, CryptoPaymentInfo,
+  PaymentMethod, CardPaymentInfo, 
   CryptoNetwork, CryptoCurrency,
-  calculateSubtotal, calculateTaxes, calculateTotal, TAX_RATE
+  calculateSubtotal, calculateTaxes, calculateTotal
 } from "@/lib/checkout-types"
+import { useI18n } from "@/lib/i18n"
 
 // Crypto networks configuration
 const cryptoNetworks: Record<CryptoCurrency, { networks: CryptoNetwork[], name: string, icon: string }> = {
@@ -80,6 +80,9 @@ const bolivianBanks = [
 
 export function PaymentForm() {
   const { state, setPaymentInfo, setStep } = useCheckout()
+  const { t } = useI18n()
+  const pay = t.checkout.payment
+  
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card')
   const [isProcessing, setIsProcessing] = useState(false)
   
@@ -108,7 +111,6 @@ export function PaymentForm() {
   const [transferBank, setTransferBank] = useState("")
   const [transferReference, setTransferReference] = useState("")
   const [transferStep, setTransferStep] = useState<'select' | 'details' | 'confirm'>('select')
-  const [transferFile, setTransferFile] = useState<File | null>(null)
 
   // Crypto state
   const [cryptoCurrency, setCryptoCurrency] = useState<CryptoCurrency>('BTC')
@@ -184,14 +186,14 @@ export function PaymentForm() {
   const validateCardForm = () => {
     const newErrors: Partial<Record<string, string>> = {}
     if (!cardForm.cardNumber.trim() || cardForm.cardNumber.replace(/\s/g, "").length < 16) {
-      newErrors.cardNumber = "Numero de tarjeta invalido"
+      newErrors.cardNumber = pay.invalidCard
     }
-    if (!cardForm.cardName.trim()) newErrors.cardName = "Requerido"
+    if (!cardForm.cardName.trim()) newErrors.cardName = pay.required
     if (!cardForm.expiry.trim() || cardForm.expiry.length < 5) {
-      newErrors.expiry = "Fecha invalida"
+      newErrors.expiry = pay.invalidDate
     }
     if (!cardForm.cvv.trim() || cardForm.cvv.length < 3) {
-      newErrors.cvv = "CVV invalido"
+      newErrors.cvv = pay.invalidCVV
     }
     setCardErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -201,8 +203,8 @@ export function PaymentForm() {
     setIsProcessing(true)
     setShowDialog(true)
     setDialogContent({
-      title: 'Procesando Pago',
-      description: 'Por favor espere mientras procesamos su pago...',
+      title: pay.processingPayment,
+      description: pay.processingDescription,
       status: 'processing'
     })
 
@@ -210,8 +212,8 @@ export function PaymentForm() {
     await new Promise(resolve => setTimeout(resolve, 2500))
 
     setDialogContent({
-      title: 'Pago Exitoso',
-      description: 'Su pago ha sido procesado correctamente',
+      title: pay.paymentSuccess,
+      description: pay.paymentSuccessDesc,
       status: 'success'
     })
 
@@ -231,7 +233,7 @@ export function PaymentForm() {
 
   const handlePayPalSubmit = async () => {
     if (!paypalEmail.trim() || !paypalEmail.includes('@')) {
-      setPaypalError('Email invalido')
+      setPaypalError(pay.invalidCard)
       return
     }
     setPaypalError('')
@@ -278,6 +280,24 @@ export function PaymentForm() {
 
   return (
     <div className="space-y-6">
+      {/* Processing Dialog */}
+      <Dialog open={showDialog} onOpenChange={setShowDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              {dialogContent.status === 'processing' && (
+                <div className="h-5 w-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              )}
+              {dialogContent.status === 'success' && (
+                <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+              )}
+              {dialogContent.title}
+            </DialogTitle>
+            <DialogDescription>{dialogContent.description}</DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
       {/* Security Badge */}
       <Card className="bg-emerald-50 border-emerald-200">
         <CardContent className="py-4">
@@ -287,10 +307,10 @@ export function PaymentForm() {
             </div>
             <div>
               <h3 className="font-semibold text-emerald-800 text-sm">
-                Pago Cifrado 100% Seguro
+                {pay.secureTitle}
               </h3>
               <p className="text-xs text-emerald-600">
-                Tus datos estan protegidos con encriptacion SSL de 256 bits
+                {pay.secureDescription}
               </p>
             </div>
           </div>
@@ -300,8 +320,8 @@ export function PaymentForm() {
       {/* Payment Method Selector */}
       <Card className="border-2">
         <CardHeader className="pb-4">
-          <CardTitle className="text-lg">Selecciona tu Metodo de Pago</CardTitle>
-          <CardDescription>Elige la opcion que prefieras para completar tu reserva</CardDescription>
+          <CardTitle className="text-lg">{pay.selectMethod}</CardTitle>
+          <CardDescription>{pay.selectMethodDescription}</CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs value={paymentMethod} onValueChange={(v) => setPaymentMethod(v as PaymentMethod)}>
@@ -311,7 +331,7 @@ export function PaymentForm() {
                 className="flex flex-col items-center gap-1 py-3 px-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border rounded-lg"
               >
                 <CreditCard className="h-5 w-5" />
-                <span className="text-xs">Tarjeta</span>
+                <span className="text-xs">{pay.card}</span>
               </TabsTrigger>
               <TabsTrigger 
                 value="paypal" 
@@ -325,21 +345,21 @@ export function PaymentForm() {
                 className="flex flex-col items-center gap-1 py-3 px-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border rounded-lg"
               >
                 <QrCode className="h-5 w-5" />
-                <span className="text-xs">QR</span>
+                <span className="text-xs">{pay.qr}</span>
               </TabsTrigger>
               <TabsTrigger 
                 value="transfer" 
                 className="flex flex-col items-center gap-1 py-3 px-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border rounded-lg"
               >
                 <Building2 className="h-5 w-5" />
-                <span className="text-xs">Transfer</span>
+                <span className="text-xs">{pay.transfer}</span>
               </TabsTrigger>
               <TabsTrigger 
                 value="crypto" 
                 className="flex flex-col items-center gap-1 py-3 px-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground border rounded-lg"
               >
                 <Bitcoin className="h-5 w-5" />
-                <span className="text-xs">Crypto</span>
+                <span className="text-xs">{pay.crypto}</span>
               </TabsTrigger>
             </TabsList>
 
@@ -353,7 +373,7 @@ export function PaymentForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="cardNumber">Numero de Tarjeta *</Label>
+                  <Label htmlFor="cardNumber">{pay.cardNumber} *</Label>
                   <div className="relative">
                     <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -371,7 +391,7 @@ export function PaymentForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="cardName">Nombre en la Tarjeta *</Label>
+                  <Label htmlFor="cardName">{pay.cardName} *</Label>
                   <Input
                     id="cardName"
                     placeholder="JUAN PEREZ"
@@ -386,7 +406,7 @@ export function PaymentForm() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="expiry">Fecha de Expiracion *</Label>
+                    <Label htmlFor="expiry">{pay.expiry} *</Label>
                     <div className="relative">
                       <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
@@ -432,13 +452,13 @@ export function PaymentForm() {
                     onCheckedChange={(checked) => setCardForm({ ...cardForm, saveCard: checked as boolean })}
                   />
                   <Label htmlFor="saveCard" className="text-sm text-muted-foreground cursor-pointer">
-                    Guardar tarjeta para futuras reservas
+                    {pay.saveCard}
                   </Label>
                 </div>
 
                 <Button type="submit" className="w-full" size="lg" disabled={isProcessing}>
                   <Shield className="mr-2 h-4 w-4" />
-                  Pagar ${total.toFixed(2)} USD
+                  {pay.pay} ${total.toFixed(2)} USD
                 </Button>
               </form>
             </TabsContent>
@@ -448,17 +468,17 @@ export function PaymentForm() {
               <div className="space-y-4">
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
                   <div className="text-3xl font-bold text-blue-600 mb-2">PayPal</div>
-                  <p className="text-sm text-blue-700">Paga de forma segura con tu cuenta PayPal</p>
+                  <p className="text-sm text-blue-700">{pay.paypalSecure}</p>
                 </div>
 
                 {paypalStep === 'input' && (
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="paypalEmail">Email de PayPal *</Label>
+                      <Label htmlFor="paypalEmail">{pay.paypalEmail} *</Label>
                       <Input
                         id="paypalEmail"
                         type="email"
-                        placeholder="tu-email@ejemplo.com"
+                        placeholder="email@example.com"
                         value={paypalEmail}
                         onChange={(e) => setPaypalEmail(e.target.value)}
                         className={paypalError ? "border-destructive" : ""}
@@ -467,7 +487,7 @@ export function PaymentForm() {
                     </div>
                     <Button onClick={handlePayPalSubmit} className="w-full bg-blue-600 hover:bg-blue-700" size="lg">
                       <ExternalLink className="mr-2 h-4 w-4" />
-                      Continuar con PayPal
+                      {pay.continuePaypal}
                     </Button>
                   </div>
                 )}
@@ -475,8 +495,8 @@ export function PaymentForm() {
                 {paypalStep === 'redirect' && (
                   <div className="text-center py-8">
                     <div className="h-12 w-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4" />
-                    <p className="text-muted-foreground">Redirigiendo a PayPal...</p>
-                    <p className="text-xs text-muted-foreground mt-2">Por favor espere</p>
+                    <p className="text-muted-foreground">{pay.redirectingPaypal}</p>
+                    <p className="text-xs text-muted-foreground mt-2">{pay.pleaseWait}</p>
                   </div>
                 )}
 
@@ -486,27 +506,20 @@ export function PaymentForm() {
                       <div className="flex items-center gap-3">
                         <CheckCircle2 className="h-6 w-6 text-green-600" />
                         <div>
-                          <p className="font-semibold text-green-800">Cuenta verificada</p>
+                          <p className="font-semibold text-green-800">{pay.accountVerified}</p>
                           <p className="text-sm text-green-600">{paypalEmail}</p>
                         </div>
                       </div>
                     </div>
                     <div className="bg-secondary/50 rounded-lg p-4">
                       <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Total a pagar:</span>
+                        <span className="text-muted-foreground">{pay.totalToPay}</span>
                         <span className="text-2xl font-bold">${total.toFixed(2)} USD</span>
                       </div>
                     </div>
                     <Button onClick={handlePayPalConfirm} className="w-full bg-blue-600 hover:bg-blue-700" size="lg" disabled={isProcessing}>
                       <Shield className="mr-2 h-4 w-4" />
-                      Confirmar Pago con PayPal
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      className="w-full" 
-                      onClick={() => setPaypalStep('input')}
-                    >
-                      Usar otra cuenta
+                      {pay.confirmPayment}
                     </Button>
                   </div>
                 )}
@@ -520,15 +533,15 @@ export function PaymentForm() {
                   <>
                     <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 text-center">
                       <QrCode className="h-10 w-10 text-purple-600 mx-auto mb-2" />
-                      <p className="font-semibold text-purple-800">Pago QR Bolivia</p>
-                      <p className="text-sm text-purple-600">Escanea y paga desde tu app bancaria</p>
+                      <p className="font-semibold text-purple-800">{pay.qrTitle}</p>
+                      <p className="text-sm text-purple-600">{pay.qrDescription}</p>
                     </div>
 
                     <div className="space-y-2">
-                      <Label>Selecciona tu Banco</Label>
+                      <Label>{pay.selectBank}</Label>
                       <Select value={qrBank} onValueChange={setQrBank}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Selecciona un banco" />
+                          <SelectValue placeholder={pay.selectBankPlaceholder} />
                         </SelectTrigger>
                         <SelectContent>
                           {bolivianBanks.map(bank => (
@@ -545,7 +558,7 @@ export function PaymentForm() {
                       disabled={!qrBank}
                     >
                       <QrCode className="mr-2 h-4 w-4" />
-                      Generar Codigo QR
+                      {pay.generateQR}
                     </Button>
                   </>
                 )}
@@ -553,9 +566,8 @@ export function PaymentForm() {
                 {qrStep === 'scan' && (
                   <div className="space-y-4">
                     <div className="bg-secondary/30 rounded-lg p-4 text-center">
-                      <p className="text-sm text-muted-foreground mb-2">Banco seleccionado: <span className="font-semibold">{qrBank}</span></p>
+                      <p className="text-sm text-muted-foreground mb-2">{pay.scanQR}</p>
                       <div className="bg-white p-4 rounded-lg inline-block shadow-sm border">
-                        {/* Simulated QR Code */}
                         <div className="w-48 h-48 relative mx-auto">
                           <div className="absolute inset-0 grid grid-cols-8 gap-0.5">
                             {Array.from({ length: 64 }).map((_, i) => (
@@ -575,18 +587,18 @@ export function PaymentForm() {
                       
                       <div className="mt-4 space-y-2">
                         <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Monto:</span>
+                          <span className="text-muted-foreground">{t.checkout.summary.total}:</span>
                           <span className="font-bold">${total.toFixed(2)} USD</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Equivalente BOB:</span>
+                          <span className="text-muted-foreground">{pay.equivalentBOB}:</span>
                           <span className="font-semibold">Bs. {(total * 6.96).toFixed(2)}</span>
                         </div>
                       </div>
 
                       <div className="mt-4 flex items-center justify-center gap-2 text-orange-600">
                         <AlertCircle className="h-4 w-4" />
-                        <span className="text-sm">Expira en: <span className="font-mono font-bold">{formatTime(qrTimer)}</span></span>
+                        <span className="text-sm">{pay.timeRemaining} <span className="font-mono font-bold">{formatTime(qrTimer)}</span></span>
                       </div>
                     </div>
 
@@ -594,12 +606,12 @@ export function PaymentForm() {
                       <div className="flex items-start gap-2">
                         <Smartphone className="h-5 w-5 text-amber-600 mt-0.5" />
                         <div className="text-sm">
-                          <p className="font-semibold text-amber-800">Instrucciones:</p>
+                          <p className="font-semibold text-amber-800">{pay.qrInstructions}</p>
                           <ol className="list-decimal list-inside text-amber-700 space-y-1 mt-1">
-                            <li>Abre la app de tu banco</li>
-                            <li>Selecciona "Pagar con QR"</li>
-                            <li>Escanea el codigo</li>
-                            <li>Confirma el pago</li>
+                            <li>{pay.qrStep1}</li>
+                            <li>{pay.qrStep2}</li>
+                            <li>{pay.qrStep3}</li>
+                            <li>{pay.qrStep4}</li>
                           </ol>
                         </div>
                       </div>
@@ -612,7 +624,7 @@ export function PaymentForm() {
                         onCheckedChange={(checked) => setQrConfirmed(checked as boolean)}
                       />
                       <Label htmlFor="qrConfirm" className="text-sm cursor-pointer">
-                        Ya realice el pago desde mi app bancaria
+                        {pay.paymentMade}
                       </Label>
                     </div>
 
@@ -623,7 +635,7 @@ export function PaymentForm() {
                       disabled={!qrConfirmed || isProcessing}
                     >
                       <CheckCircle2 className="mr-2 h-4 w-4" />
-                      Confirmar Pago
+                      {pay.confirmPaymentBtn}
                     </Button>
 
                     <Button 
@@ -636,7 +648,7 @@ export function PaymentForm() {
                       }}
                     >
                       <RefreshCw className="mr-2 h-4 w-4" />
-                      Generar nuevo codigo
+                      {pay.newQR}
                     </Button>
                   </div>
                 )}
@@ -650,15 +662,15 @@ export function PaymentForm() {
                   <>
                     <div className="bg-teal-50 border border-teal-200 rounded-lg p-4 text-center">
                       <Building2 className="h-10 w-10 text-teal-600 mx-auto mb-2" />
-                      <p className="font-semibold text-teal-800">Transferencia Bancaria</p>
-                      <p className="text-sm text-teal-600">Realiza una transferencia directa</p>
+                      <p className="font-semibold text-teal-800">{pay.transferTitle}</p>
+                      <p className="text-sm text-teal-600">{pay.transferDescription}</p>
                     </div>
 
                     <div className="space-y-2">
-                      <Label>Desde que banco realizaras la transferencia?</Label>
+                      <Label>{pay.originBank}</Label>
                       <Select value={transferBank} onValueChange={setTransferBank}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Selecciona tu banco" />
+                          <SelectValue placeholder={pay.originBankPlaceholder} />
                         </SelectTrigger>
                         <SelectContent>
                           {bolivianBanks.map(bank => (
@@ -674,7 +686,7 @@ export function PaymentForm() {
                       size="lg"
                       disabled={!transferBank}
                     >
-                      Ver datos de cuenta
+                      {pay.continueTransfer}
                       <ChevronRight className="ml-2 h-4 w-4" />
                     </Button>
                   </>
@@ -683,16 +695,16 @@ export function PaymentForm() {
                 {transferStep === 'details' && (
                   <div className="space-y-4">
                     <div className="bg-secondary/30 rounded-lg p-4 space-y-3">
-                      <h4 className="font-semibold text-center">Datos para Transferencia</h4>
+                      <h4 className="font-semibold text-center">{pay.transferTo}</h4>
                       <Separator />
                       
                       <div className="space-y-3 text-sm">
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Banco:</span>
+                          <span className="text-muted-foreground">{pay.bankName}</span>
                           <span className="font-semibold">Banco Union</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-muted-foreground">Cuenta:</span>
+                          <span className="text-muted-foreground">{pay.accountNumber}</span>
                           <div className="flex items-center gap-2">
                             <span className="font-mono font-semibold">10000012345678</span>
                             <Button 
@@ -706,46 +718,29 @@ export function PaymentForm() {
                           </div>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Tipo:</span>
-                          <span className="font-semibold">Caja de Ahorros</span>
+                          <span className="text-muted-foreground">{pay.accountType}</span>
+                          <span className="font-semibold">{pay.savingsAccount}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Moneda:</span>
-                          <span className="font-semibold">Dolares (USD)</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Titular:</span>
+                          <span className="text-muted-foreground">{pay.accountName}</span>
                           <span className="font-semibold">Sucre Tourism S.R.L.</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">NIT:</span>
-                          <span className="font-semibold">123456789</span>
                         </div>
                         <Separator />
                         <div className="flex justify-between text-base">
-                          <span className="text-muted-foreground">Monto a transferir:</span>
+                          <span className="text-muted-foreground">{pay.amount}</span>
                           <span className="font-bold text-primary">${total.toFixed(2)} USD</span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-                      <p className="text-sm text-amber-700">
-                        <strong>Importante:</strong> Incluye tu numero de reserva en el concepto de la transferencia para agilizar la verificacion.
-                      </p>
-                    </div>
-
                     <div className="space-y-2">
-                      <Label htmlFor="transferRef">Numero de Comprobante/Referencia *</Label>
+                      <Label htmlFor="transferRef">{pay.referenceNumber} *</Label>
                       <Input
                         id="transferRef"
-                        placeholder="Ej: 123456789"
+                        placeholder={pay.referencePlaceholder}
                         value={transferReference}
                         onChange={(e) => setTransferReference(e.target.value)}
                       />
-                      <p className="text-xs text-muted-foreground">
-                        Ingresa el numero de operacion de tu transferencia
-                      </p>
                     </div>
 
                     <Button 
@@ -755,7 +750,7 @@ export function PaymentForm() {
                       disabled={!transferReference || isProcessing}
                     >
                       <CheckCircle2 className="mr-2 h-4 w-4" />
-                      Confirmar Transferencia
+                      {pay.confirmTransfer}
                     </Button>
 
                     <Button 
@@ -764,7 +759,7 @@ export function PaymentForm() {
                       onClick={() => setTransferStep('select')}
                     >
                       <ArrowLeft className="mr-2 h-4 w-4" />
-                      Volver
+                      {t.checkout.back}
                     </Button>
                   </div>
                 )}
@@ -778,13 +773,13 @@ export function PaymentForm() {
                   <>
                     <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 text-center">
                       <Bitcoin className="h-10 w-10 text-orange-500 mx-auto mb-2" />
-                      <p className="font-semibold text-orange-800">Pago con Criptomonedas</p>
-                      <p className="text-sm text-orange-600">BTC, ETH, USDT, USDC y mas</p>
+                      <p className="font-semibold text-orange-800">{pay.cryptoTitle}</p>
+                      <p className="text-sm text-orange-600">{pay.cryptoDescription}</p>
                     </div>
 
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <Label>Selecciona la Criptomoneda</Label>
+                        <Label>{pay.selectCrypto}</Label>
                         <div className="grid grid-cols-3 gap-2">
                           {(Object.keys(cryptoNetworks) as CryptoCurrency[]).map((crypto) => (
                             <Button
@@ -802,10 +797,10 @@ export function PaymentForm() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label>Selecciona la Red</Label>
+                        <Label>{pay.selectNetwork}</Label>
                         <Select value={cryptoNetwork} onValueChange={(v) => setCryptoNetwork(v as CryptoNetwork)}>
                           <SelectTrigger>
-                            <SelectValue placeholder="Selecciona una red" />
+                            <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
                             {cryptoNetworks[cryptoCurrency].networks.map(network => (
@@ -815,9 +810,6 @@ export function PaymentForm() {
                             ))}
                           </SelectContent>
                         </Select>
-                        <p className="text-xs text-muted-foreground">
-                          Asegurate de seleccionar la red correcta para evitar perdida de fondos
-                        </p>
                       </div>
                     </div>
 
@@ -826,7 +818,7 @@ export function PaymentForm() {
                       className="w-full bg-orange-500 hover:bg-orange-600" 
                       size="lg"
                     >
-                      Continuar
+                      {pay.continuePayment}
                       <ChevronRight className="ml-2 h-4 w-4" />
                     </Button>
                   </>
@@ -859,7 +851,7 @@ export function PaymentForm() {
                       </div>
 
                       <div className="mt-4">
-                        <p className="text-xs text-muted-foreground mb-1">Direccion de {cryptoCurrency}:</p>
+                        <p className="text-xs text-muted-foreground mb-1">{pay.toAddress}</p>
                         <div className="flex items-center justify-center gap-2 bg-white rounded border p-2">
                           <code className="text-xs font-mono break-all">
                             {walletAddresses[cryptoNetwork].slice(0, 20)}...{walletAddresses[cryptoNetwork].slice(-8)}
@@ -877,11 +869,11 @@ export function PaymentForm() {
 
                       <div className="mt-4 space-y-2">
                         <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Total USD:</span>
-                          <span className="font-bold">${total.toFixed(2)}</span>
+                          <span className="text-muted-foreground">{pay.sendExactAmount}</span>
+                          <span className="font-bold">${total.toFixed(2)} USD</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Equivalente {cryptoCurrency}:</span>
+                          <span className="text-muted-foreground">{cryptoCurrency}:</span>
                           <span className="font-semibold">
                             {cryptoCurrency === 'BTC' ? (total / 65000).toFixed(6) :
                              cryptoCurrency === 'ETH' ? (total / 3500).toFixed(5) :
@@ -894,35 +886,27 @@ export function PaymentForm() {
 
                       <div className="mt-4 flex items-center justify-center gap-2 text-orange-600">
                         <AlertCircle className="h-4 w-4" />
-                        <span className="text-sm">Expira en: <span className="font-mono font-bold">{formatTime(cryptoTimer)}</span></span>
+                        <span className="text-sm">{pay.timeRemaining} <span className="font-mono font-bold">{formatTime(cryptoTimer)}</span></span>
                       </div>
                     </div>
 
                     <div className="bg-red-50 border border-red-200 rounded-lg p-3">
                       <div className="flex items-start gap-2">
-                        <AlertCircle className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
-                        <div className="text-sm text-red-700">
-                          <p className="font-semibold">Importante:</p>
-                          <ul className="list-disc list-inside mt-1 space-y-1">
-                            <li>Envia solo <strong>{cryptoCurrency}</strong> a esta direccion</li>
-                            <li>Usa la red <strong>{networkNames[cryptoNetwork]}</strong></li>
-                            <li>Enviar otro token resultara en perdida de fondos</li>
-                          </ul>
-                        </div>
+                        <AlertCircle className="h-5 w-5 text-red-600 mt-0.5" />
+                        <p className="text-sm text-red-700">
+                          <strong>{pay.networkWarning}</strong> {networkNames[cryptoNetwork]}. {pay.networkWarning2}
+                        </p>
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="txHash">Hash de Transaccion (TX Hash) *</Label>
+                      <Label htmlFor="txHash">{pay.txHash} *</Label>
                       <Input
                         id="txHash"
-                        placeholder="0x..."
+                        placeholder={pay.txHashPlaceholder}
                         value={cryptoTxHash}
                         onChange={(e) => setCryptoTxHash(e.target.value)}
                       />
-                      <p className="text-xs text-muted-foreground">
-                        Ingresa el hash de tu transaccion para verificacion
-                      </p>
                     </div>
 
                     <Button 
@@ -932,7 +916,7 @@ export function PaymentForm() {
                       disabled={!cryptoTxHash || isProcessing}
                     >
                       <CheckCircle2 className="mr-2 h-4 w-4" />
-                      Confirmar Pago
+                      {pay.confirmCrypto}
                     </Button>
 
                     <Button 
@@ -944,7 +928,7 @@ export function PaymentForm() {
                       }}
                     >
                       <ArrowLeft className="mr-2 h-4 w-4" />
-                      Cambiar criptomoneda/red
+                      {t.checkout.back}
                     </Button>
                   </div>
                 )}
@@ -953,74 +937,6 @@ export function PaymentForm() {
           </Tabs>
         </CardContent>
       </Card>
-
-      {/* Cancellation Policy */}
-      <Card className="bg-blue-50 border-blue-200">
-        <CardContent className="py-4">
-          <div className="flex items-start gap-3">
-            <CalendarCheck className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
-            <div>
-              <h3 className="font-semibold text-blue-800 text-sm">
-                Cancelacion sin friccion
-              </h3>
-              <p className="text-xs text-blue-600 mt-1">
-                Cancela hasta 48 horas antes sin penalidad. Reprograma tu experiencia 
-                cuando quieras con nuestra politica de reserva flexible 365 dias.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Action Buttons */}
-      <div className="flex gap-3">
-        <Button 
-          type="button" 
-          variant="outline" 
-          onClick={() => setStep('details')}
-          className="flex-1"
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Volver
-        </Button>
-      </div>
-
-      {/* Processing Dialog */}
-      <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              {dialogContent.status === 'processing' && (
-                <div className="h-5 w-5 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-              )}
-              {dialogContent.status === 'success' && (
-                <CheckCircle2 className="h-5 w-5 text-green-600" />
-              )}
-              {dialogContent.status === 'error' && (
-                <AlertCircle className="h-5 w-5 text-red-600" />
-              )}
-              {dialogContent.title}
-            </DialogTitle>
-            <DialogDescription>
-              {dialogContent.description}
-            </DialogDescription>
-          </DialogHeader>
-          {dialogContent.status === 'processing' && (
-            <div className="flex flex-col items-center py-6">
-              <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-4" />
-              <p className="text-sm text-muted-foreground">No cierres esta ventana</p>
-            </div>
-          )}
-          {dialogContent.status === 'success' && (
-            <div className="flex flex-col items-center py-6">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                <CheckCircle2 className="h-8 w-8 text-green-600" />
-              </div>
-              <p className="text-sm text-muted-foreground">Redirigiendo...</p>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   )
 }

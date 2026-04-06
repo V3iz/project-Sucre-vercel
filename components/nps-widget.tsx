@@ -11,6 +11,7 @@ import {
   ThumbsUp,
   Sparkles,
 } from "lucide-react"
+import { useI18n } from "@/lib/i18n"
 
 type Phase = "score" | "promoter" | "detractor" | "passive" | "submitted"
 
@@ -18,20 +19,6 @@ function getCategory(score: number): "promoter" | "passive" | "detractor" {
   if (score >= 9) return "promoter"
   if (score >= 7) return "passive"
   return "detractor"
-}
-
-const scoreLabels: Record<number, string> = {
-  0: "Nada probable",
-  1: "Muy poco probable",
-  2: "Poco probable",
-  3: "Algo improbable",
-  4: "Indiferente",
-  5: "Algo probable",
-  6: "Moderadamente probable",
-  7: "Bastante probable",
-  8: "Muy probable",
-  9: "Extremadamente probable",
-  10: "¡Definitivamente!",
 }
 
 const scoreColors: Record<number, string> = {
@@ -67,6 +54,8 @@ export function NpsWidget() {
   const [phase, setPhase] = useState<Phase>("score")
   const [feedback, setFeedback] = useState("")
   const [hoveredScore, setHoveredScore] = useState<number | null>(null)
+  const { t } = useI18n()
+  const nps = t.nps
 
   const handleScoreSelect = (score: number) => {
     setSelected(score)
@@ -83,6 +72,7 @@ export function NpsWidget() {
   }
 
   const displayScore = hoveredScore !== null ? hoveredScore : selected
+  const scoreLabels = nps.scoreLabels as Record<number, string>
 
   return (
     <section className="py-24 bg-[oklch(0.985_0.002_90)]">
@@ -92,7 +82,7 @@ export function NpsWidget() {
         <div className="flex items-center justify-center gap-2 mb-4">
           <div className="h-px w-10 bg-primary/30" />
           <span className="text-xs font-semibold tracking-widest uppercase text-muted-foreground font-sans">
-            Tu opinión importa
+            {nps.sectionLabel}
           </span>
           <div className="h-px w-10 bg-primary/30" />
         </div>
@@ -108,7 +98,7 @@ export function NpsWidget() {
                 </div>
                 <div>
                   <h2 className="text-xl md:text-2xl font-semibold text-foreground leading-snug text-balance">
-                    ¿Qué tan probable es que recomiendes la experiencia en Sucre a otros viajeros?
+                    {nps.question}
                   </h2>
                   {displayScore !== null && (
                     <p className="mt-1.5 text-sm text-muted-foreground transition-all">
@@ -134,7 +124,7 @@ export function NpsWidget() {
                           ? scoreActiveColors[score] + " scale-110 shadow-md"
                           : scoreColors[score]
                       )}
-                      aria-label={`Puntuación ${score}`}
+                      aria-label={`${t.common.score} ${score}`}
                       aria-pressed={isSelected}
                     >
                       {score}
@@ -148,8 +138,8 @@ export function NpsWidget() {
 
               {/* Scale extremes */}
               <div className="flex justify-between mb-8">
-                <span className="text-xs text-muted-foreground">Nada probable</span>
-                <span className="text-xs text-muted-foreground">Totalmente seguro</span>
+                <span className="text-xs text-muted-foreground">{nps.notLikely}</span>
+                <span className="text-xs text-muted-foreground">{nps.veryLikely}</span>
               </div>
 
               {/* Confirm button */}
@@ -164,14 +154,14 @@ export function NpsWidget() {
                       : "bg-muted text-muted-foreground cursor-not-allowed"
                   )}
                 >
-                  Confirmar puntuación
+                  {nps.confirmScore}
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
           )}
 
-          {/* Phase: Promoter (9–10) */}
+          {/* Phase: Promoter (9-10) */}
           {phase === "promoter" && (
             <div className="p-8 md:p-12">
               <div className="text-center mb-8">
@@ -180,23 +170,23 @@ export function NpsWidget() {
                 </div>
                 <div className="inline-flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-xs font-semibold px-3 py-1 rounded-full mb-4">
                   <Heart className="w-3.5 h-3.5" />
-                  Promotor activo �� Puntuación {selected}
+                  {nps.promoterBadge} - {t.common.score} {selected}
                 </div>
                 <h3 className="text-2xl font-semibold text-foreground mb-2">
-                  ¡Gracias por tu entusiasmo!
+                  {nps.promoterTitle}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed max-w-md mx-auto">
-                  Eres exactamente el tipo de viajero que hace grande a Sucre. Tu voz inspira a otros a descubrir este destino único.
+                  {nps.promoterDescription}
                 </p>
               </div>
 
               {/* Ambassador CTA */}
               <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 text-center mb-6">
                 <p className="text-sm text-green-800 font-medium mb-1">
-                  Únete a la comunidad de embajadores de Sucre
+                  {nps.ambassadorTitle}
                 </p>
                 <p className="text-xs text-green-700/80 mb-4">
-                  Comparte tu aventura y conecta con viajeros que aman el patrimonio
+                  {nps.ambassadorDescription}
                 </p>
                 <a
                   href="https://www.instagram.com/explore/tags/vivesucre/"
@@ -205,7 +195,7 @@ export function NpsWidget() {
                   className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-6 py-3 rounded-xl transition-colors shadow-sm"
                 >
                   <Heart className="w-4 h-4" />
-                  Comparte tu viaje con #ViveSucre
+                  {nps.shareTrip}
                   <ArrowRight className="w-4 h-4" />
                 </a>
               </div>
@@ -215,13 +205,13 @@ export function NpsWidget() {
                   onClick={handleSubmit}
                   className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2 transition-colors"
                 >
-                  Finalizar sin compartir
+                  {nps.finishWithoutSharing}
                 </button>
               </div>
             </div>
           )}
 
-          {/* Phase: Passive (7–8) */}
+          {/* Phase: Passive (7-8) */}
           {phase === "passive" && (
             <div className="p-8 md:p-12">
               <div className="text-center mb-8">
@@ -229,25 +219,25 @@ export function NpsWidget() {
                   <ThumbsUp className="w-8 h-8 text-lime-600" />
                 </div>
                 <div className="inline-flex items-center gap-2 bg-lime-50 border border-lime-200 text-lime-700 text-xs font-semibold px-3 py-1 rounded-full mb-4">
-                  Satisfecho — Puntuación {selected}
+                  {nps.passiveBadge} - {t.common.score} {selected}
                 </div>
                 <h3 className="text-2xl font-semibold text-foreground mb-2">
-                  Gracias por visitarnos
+                  {nps.passiveTitle}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed max-w-md mx-auto">
-                  Nos alegra que hayas disfrutado. ¿Hay algo que podría convertir tu experiencia en perfecta?
+                  {nps.passiveDescription}
                 </p>
               </div>
 
               <div className="mb-6">
                 <label className="block text-sm font-medium text-foreground mb-2">
-                  ¿Qué podríamos mejorar para superar tus expectativas?
-                  <span className="text-muted-foreground font-normal"> (opcional)</span>
+                  {nps.passiveQuestion}
+                  <span className="text-muted-foreground font-normal"> {nps.optional}</span>
                 </label>
                 <Textarea
                   value={feedback}
                   onChange={(e) => setFeedback(e.target.value)}
-                  placeholder="Comparte cualquier detalle que hubiera hecho tu viaje aún más especial..."
+                  placeholder={nps.passivePlaceholder}
                   className="min-h-[100px] resize-none bg-muted/40 border-border focus:border-primary font-sans text-sm"
                   maxLength={500}
                 />
@@ -260,13 +250,13 @@ export function NpsWidget() {
                   className="inline-flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90 text-sm font-semibold px-6 py-2.5 rounded-xl transition-colors shadow-sm"
                 >
                   <Send className="w-4 h-4" />
-                  Enviar comentario
+                  {nps.sendComment}
                 </button>
               </div>
             </div>
           )}
 
-          {/* Phase: Detractor (0–6) */}
+          {/* Phase: Detractor (0-6) */}
           {phase === "detractor" && (
             <div className="p-8 md:p-12">
               <div className="text-center mb-8">
@@ -274,13 +264,13 @@ export function NpsWidget() {
                   <MessageSquare className="w-8 h-8 text-orange-600" />
                 </div>
                 <div className="inline-flex items-center gap-2 bg-orange-50 border border-orange-200 text-orange-700 text-xs font-semibold px-3 py-1 rounded-full mb-4">
-                  Puntuación {selected}
+                  {t.common.score} {selected}
                 </div>
                 <h3 className="text-2xl font-semibold text-foreground mb-2">
-                  Lamentamos que no fue lo que esperabas
+                  {nps.detractorTitle}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed max-w-md mx-auto">
-                  Tu experiencia nos importa. Cada observación nos ayuda a construir un mejor destino para todos.
+                  {nps.detractorDescription}
                 </p>
               </div>
 
@@ -291,15 +281,15 @@ export function NpsWidget() {
                   </div>
                   <div className="flex-1">
                     <label className="block text-sm font-semibold text-orange-900 mb-1">
-                      Ayúdanos a mejorar el destino. ¿En qué fallamos?
+                      {nps.detractorQuestion}
                     </label>
                     <p className="text-xs text-orange-700/80 mb-3">
-                      Tu retroalimentación directa va al equipo de gestión del destino. Sí, de verdad.
+                      {nps.detractorNote}
                     </p>
                     <Textarea
                       value={feedback}
                       onChange={(e) => setFeedback(e.target.value)}
-                      placeholder="Cuéntanos qué no funcionó: atención, precios, accesibilidad, higiene, señalización..."
+                      placeholder={nps.detractorPlaceholder}
                       className="min-h-[120px] resize-none bg-white border-orange-200 focus:border-orange-400 font-sans text-sm"
                       maxLength={600}
                     />
@@ -314,7 +304,7 @@ export function NpsWidget() {
                   className="inline-flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90 text-sm font-semibold px-6 py-2.5 rounded-xl transition-colors shadow-sm"
                 >
                   <Send className="w-4 h-4" />
-                  Enviar retroalimentación
+                  {nps.sendFeedback}
                 </button>
               </div>
             </div>
@@ -327,14 +317,14 @@ export function NpsWidget() {
                 <Heart className="w-8 h-8 text-primary" />
               </div>
               <h3 className="text-2xl font-semibold text-foreground mb-2">
-                Recibido. Gracias por tu tiempo.
+                {nps.submittedTitle}
               </h3>
               <p className="text-muted-foreground leading-relaxed max-w-sm mx-auto mb-6">
-                Tu voz es parte del esfuerzo colectivo por hacer de Sucre un destino cada vez más extraordinario.
+                {nps.submittedDescription}
               </p>
               <div className="inline-flex items-center gap-2 bg-secondary text-secondary-foreground text-xs font-medium px-4 py-2 rounded-full">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                Respuesta registrada
+                {nps.responseRecorded}
               </div>
             </div>
           )}
@@ -343,7 +333,7 @@ export function NpsWidget() {
           {phase !== "submitted" && (
             <div className="border-t border-border bg-muted/40 px-8 py-3 flex items-center justify-between">
               <p className="text-xs text-muted-foreground">
-                Anónimo · Tiempo estimado: 30 segundos
+                {nps.anonymous}
               </p>
               <div className="flex items-center gap-1.5">
                 {(["score", "promoter", "passive", "detractor"] as Phase[]).map((p) => (
