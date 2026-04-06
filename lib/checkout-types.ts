@@ -16,13 +16,47 @@ export interface CustomerInfo {
   specialRequests?: string
 }
 
-export interface PaymentInfo {
+export type PaymentMethod = 'card' | 'paypal' | 'qr' | 'transfer' | 'crypto'
+export type CryptoNetwork = 'bitcoin' | 'ethereum' | 'tron' | 'polygon' | 'bsc' | 'solana'
+export type CryptoCurrency = 'BTC' | 'ETH' | 'USDT' | 'USDC' | 'BNB' | 'SOL'
+
+export interface CardPaymentInfo {
+  method: 'card'
   cardNumber: string
   cardName: string
   expiry: string
   cvv: string
   saveCard: boolean
 }
+
+export interface PayPalPaymentInfo {
+  method: 'paypal'
+  email: string
+}
+
+export interface QRPaymentInfo {
+  method: 'qr'
+  bank: string
+  confirmed: boolean
+}
+
+export interface TransferPaymentInfo {
+  method: 'transfer'
+  bank: string
+  referenceNumber: string
+  confirmed: boolean
+}
+
+export interface CryptoPaymentInfo {
+  method: 'crypto'
+  currency: CryptoCurrency
+  network: CryptoNetwork
+  walletAddress: string
+  txHash?: string
+  confirmed: boolean
+}
+
+export type PaymentInfo = CardPaymentInfo | PayPalPaymentInfo | QRPaymentInfo | TransferPaymentInfo | CryptoPaymentInfo
 
 export interface BookingState {
   items: BookingItem[]
