@@ -101,11 +101,9 @@ export function BookingModal({ isOpen, onClose, item }: BookingModalProps) {
               <DialogTitle className="font-serif text-xl font-semibold text-foreground">
                 {item.name}
               </DialogTitle>
-              {item.subtitle && (
-                <DialogDescription className="mt-1 text-sm text-muted-foreground">
-                  {item.subtitle}
-                </DialogDescription>
-              )}
+              <DialogDescription className="mt-1 text-sm text-muted-foreground">
+                {item.subtitle || `Reserva tu experiencia de ${item.category.toLowerCase()}`}
+              </DialogDescription>
             </div>
           </div>
           
