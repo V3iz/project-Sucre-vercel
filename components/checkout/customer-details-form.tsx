@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { User, Mail, Phone, Globe, MessageSquare, ArrowRight, Shield, CalendarCheck } from "lucide-react"
+import { TransportSelector } from "@/components/checkout/transport-selector"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { useCheckout } from "@/lib/checkout-context"
 import { CustomerInfo } from "@/lib/checkout-types"
+import { useI18n } from "@/lib/i18n"
 
 const countries = [
   "Argentina", "Bolivia", "Brasil", "Chile", "Colombia", "Ecuador", 
@@ -19,6 +21,9 @@ const countries = [
 
 export function CustomerDetailsForm() {
   const { setCustomerInfo, setStep } = useCheckout()
+  const { t, language } = useI18n()
+  const details = t.checkout.details
+  
   const [form, setForm] = useState<CustomerInfo>({
     firstName: "",
     lastName: "",
@@ -31,13 +36,13 @@ export function CustomerDetailsForm() {
 
   const validateForm = () => {
     const newErrors: Partial<CustomerInfo> = {}
-    if (!form.firstName.trim()) newErrors.firstName = "Requerido"
-    if (!form.lastName.trim()) newErrors.lastName = "Requerido"
+    if (!form.firstName.trim()) newErrors.firstName = details.required
+    if (!form.lastName.trim()) newErrors.lastName = details.required
     if (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email)) {
-      newErrors.email = "Email inválido"
+      newErrors.email = language === "es" ? "Email inválido" : "Invalid email"
     }
-    if (!form.phone.trim()) newErrors.phone = "Requerido"
-    if (!form.country) newErrors.country = "Requerido"
+    if (!form.phone.trim()) newErrors.phone = details.required
+    if (!form.country) newErrors.country = details.required
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -56,11 +61,11 @@ export function CustomerDetailsForm() {
       <div className="flex flex-wrap gap-3 mb-6">
         <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 py-1.5 px-3">
           <Shield className="h-3.5 w-3.5 mr-1.5" />
-          Datos Protegidos
+          {t.checkout.securePayment}
         </Badge>
         <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 py-1.5 px-3">
           <CalendarCheck className="h-3.5 w-3.5 mr-1.5" />
-          Cancelación sin fricción
+          {t.checkout.flexibleCancellation}
         </Badge>
       </div>
 
@@ -68,16 +73,16 @@ export function CustomerDetailsForm() {
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
             <User className="h-5 w-5 text-primary" />
-            Información Personal
+            {details.personalInfo}
           </CardTitle>
           <CardDescription>
-            Los datos del viajero principal para la reserva
+            {details.description}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="firstName">Nombre *</Label>
+              <Label htmlFor="firstName">{details.firstName} *</Label>
               <Input
                 id="firstName"
                 placeholder="Juan"
@@ -90,7 +95,7 @@ export function CustomerDetailsForm() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="lastName">Apellido *</Label>
+              <Label htmlFor="lastName">{details.lastName} *</Label>
               <Input
                 id="lastName"
                 placeholder="Pérez"
@@ -105,7 +110,7 @@ export function CustomerDetailsForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email">Correo Electrónico *</Label>
+            <Label htmlFor="email">{details.email} *</Label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -124,7 +129,7 @@ export function CustomerDetailsForm() {
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="phone">Teléfono *</Label>
+              <Label htmlFor="phone">{details.phone} *</Label>
               <div className="relative">
                 <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -141,14 +146,14 @@ export function CustomerDetailsForm() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="country">País de Residencia *</Label>
+              <Label htmlFor="country">{details.country} *</Label>
               <Select
                 value={form.country}
                 onValueChange={(value) => setForm({ ...form, country: value })}
               >
                 <SelectTrigger className={errors.country ? "border-destructive" : ""}>
                   <Globe className="h-4 w-4 mr-2 text-muted-foreground" />
-                  <SelectValue placeholder="Seleccionar país" />
+                  <SelectValue placeholder={details.selectCountry} />
                 </SelectTrigger>
                 <SelectContent>
                   {countries.map((country) => (
@@ -165,12 +170,12 @@ export function CustomerDetailsForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="requests">Solicitudes Especiales (opcional)</Label>
+            <Label htmlFor="requests">{details.specialRequests} ({t.nps.optional})</Label>
             <div className="relative">
               <MessageSquare className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Textarea
                 id="requests"
-                placeholder="Alergias alimentarias, requerimientos de accesibilidad, preferencias..."
+                placeholder={details.specialRequestsPlaceholder}
                 value={form.specialRequests}
                 onChange={(e) => setForm({ ...form, specialRequests: e.target.value })}
                 className="pl-10 min-h-[80px] resize-none"
@@ -180,8 +185,11 @@ export function CustomerDetailsForm() {
         </CardContent>
       </Card>
 
+      {/* Transport Selector */}
+      <TransportSelector />
+
       <Button type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90">
-        Continuar al Pago
+        {details.continue}
         <ArrowRight className="ml-2 h-4 w-4" />
       </Button>
     </form>

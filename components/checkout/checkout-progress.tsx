@@ -2,18 +2,20 @@
 
 import { Check, User, CreditCard, CheckCircle } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useI18n } from "@/lib/i18n"
 
 interface CheckoutProgressProps {
   currentStep: 'details' | 'payment' | 'confirmation'
 }
 
-const steps = [
-  { id: 'details', label: 'Datos Personales', icon: User },
-  { id: 'payment', label: 'Pago Seguro', icon: CreditCard },
-  { id: 'confirmation', label: 'Confirmación', icon: CheckCircle },
-]
-
 export function CheckoutProgress({ currentStep }: CheckoutProgressProps) {
+  const { t } = useI18n()
+  const steps = [
+    { id: 'details', label: t.checkout.steps.details, icon: User },
+    { id: 'payment', label: t.checkout.steps.payment, icon: CreditCard },
+    { id: 'confirmation', label: t.checkout.steps.confirmation, icon: CheckCircle },
+  ]
+  
   const currentIndex = steps.findIndex(s => s.id === currentStep)
 
   return (

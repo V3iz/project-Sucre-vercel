@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, ReactNode } from "react"
-import { BookingItem, CustomerInfo, PaymentInfo, BookingState } from "./checkout-types"
+import { BookingItem, CustomerInfo, PaymentInfo, BookingState, TransportInfo } from "./checkout-types"
 
 interface CheckoutContextType {
   state: BookingState
@@ -13,6 +13,7 @@ interface CheckoutContextType {
   setStep: (step: BookingState['step']) => void
   applyPromoCode: (code: string) => void
   clearBooking: () => void
+  setTransport: (transport: TransportInfo) => void
 }
 
 const initialState: BookingState = {
@@ -28,7 +29,8 @@ const initialState: BookingState = {
   customer: null,
   payment: null,
   step: 'details',
-  discount: 0
+  discount: 0,
+  transport: { type: 'none', price: 0 },
 }
 
 const CheckoutContext = createContext<CheckoutContextType | undefined>(undefined)
@@ -72,10 +74,13 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
   }
 
   const applyPromoCode = (code: string) => {
-    // Simple promo code logic - could be expanded
     if (code.toUpperCase() === 'SUCRE10') {
       setState(prev => ({ ...prev, promoCode: code, discount: 10 }))
     }
+  }
+
+  const setTransport = (transport: TransportInfo) => {
+    setState(prev => ({ ...prev, transport }))
   }
 
   const clearBooking = () => {
@@ -92,7 +97,8 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
       setPaymentInfo,
       setStep,
       applyPromoCode,
-      clearBooking
+      clearBooking,
+      setTransport,
     }}>
       {children}
     </CheckoutContext.Provider>

@@ -79,7 +79,13 @@ export function Hero() {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed text-pretty">
+          <p
+            className="text-lg sm:text-xl lg:text-2xl max-w-2xl mx-auto leading-relaxed text-pretty font-medium"
+            style={{
+              color: "oklch(0.97 0.01 85)",
+              textShadow: "0 1px 4px rgba(0,0,0,0.55), 0 0 24px rgba(0,0,0,0.30)",
+            }}
+          >
             {h.subtitle}
           </p>
         </div>

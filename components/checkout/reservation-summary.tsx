@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Minus, Plus, Trash2, Tag, Shield, Leaf } from "lucide-react"
+import { Minus, Plus, Trash2, Tag, Shield, Leaf, Bus, Plane, X } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,14 +9,18 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { useCheckout } from "@/lib/checkout-context"
 import { calculateSubtotal, calculateTaxes, calculateTotal } from "@/lib/checkout-types"
+import { useI18n } from "@/lib/i18n"
 
 export function ReservationSummary() {
   const { state, updateQuantity, removeItem, applyPromoCode } = useCheckout()
   const [promoInput, setPromoInput] = useState("")
+  const { t } = useI18n()
+  const summary = t.checkout.summary
 
   const subtotal = calculateSubtotal(state.items)
   const taxes = calculateTaxes(subtotal)
-  const total = calculateTotal(subtotal, taxes, state.discount)
+  const transportPrice = state.transport?.price ?? 0
+  const total = calculateTotal(subtotal, taxes, state.discount, transportPrice)
 
   const handleApplyPromo = () => {
     if (promoInput.trim()) {
@@ -28,10 +32,10 @@ export function ReservationSummary() {
     <Card className="sticky top-24 bg-card border-2 border-border shadow-lg">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold">Resumen de Reserva</CardTitle>
+          <CardTitle className="text-lg font-semibold">{summary.title}</CardTitle>
           <Badge variant="outline" className="text-emerald-600 border-emerald-300 bg-emerald-50">
             <Shield className="h-3 w-3 mr-1" />
-            Pago Protegido
+            {t.checkout.securePayment}
           </Badge>
         </div>
       </CardHeader>
@@ -51,6 +55,7 @@ export function ReservationSummary() {
                   size="icon"
                   className="h-6 w-6 text-muted-foreground hover:text-destructive"
                   onClick={() => removeItem(item.id)}
+                  aria-label={summary.remove}
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>
@@ -89,20 +94,20 @@ export function ReservationSummary() {
           <div className="relative flex-1">
             <Tag className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Código promocional"
+              placeholder={summary.couponPlaceholder}
               value={promoInput}
               onChange={(e) => setPromoInput(e.target.value)}
               className="pl-9 text-sm"
             />
           </div>
           <Button variant="outline" size="sm" onClick={handleApplyPromo}>
-            Aplicar
+            {summary.apply}
           </Button>
         </div>
 
         {state.promoCode && (
           <div className="flex items-center justify-between text-sm text-emerald-600 bg-emerald-50 px-3 py-2 rounded-md">
-            <span>Código {state.promoCode} aplicado</span>
+            <span>{state.promoCode}</span>
             <span>-${state.discount.toFixed(2)}</span>
           </div>
         )}
@@ -112,17 +117,32 @@ export function ReservationSummary() {
         {/* Price Breakdown */}
         <div className="space-y-2 text-sm">
           <div className="flex justify-between text-muted-foreground">
-            <span>Subtotal</span>
+            <span>{summary.subtotal}</span>
             <span>${subtotal.toFixed(2)} USD</span>
           </div>
           <div className="flex justify-between text-muted-foreground">
-            <span>Impuestos (13% IVA)</span>
+            <span>{summary.taxes} (13% IVA)</span>
             <span>${taxes.toFixed(2)} USD</span>
           </div>
           {state.discount > 0 && (
             <div className="flex justify-between text-emerald-600">
-              <span>Descuento</span>
+              <span>{summary.discount}</span>
               <span>-${state.discount.toFixed(2)} USD</span>
+            </div>
+          )}
+          {transportPrice > 0 && (
+            <div className="flex justify-between items-center">
+              <span className="flex items-center gap-1.5 text-muted-foreground">
+                {state.transport.type === "ground" ? (
+                  <Bus className="h-3.5 w-3.5 text-amber-600" />
+                ) : (
+                  <Plane className="h-3.5 w-3.5 text-sky-600" />
+                )}
+                {t.checkout.transport?.options[state.transport.type as "ground" | "air"]?.label ?? "Transporte"}
+              </span>
+              <span className={state.transport.type === "ground" ? "text-amber-700 font-medium" : "text-sky-700 font-medium"}>
+                +${transportPrice.toFixed(2)} USD
+              </span>
             </div>
           )}
         </div>
@@ -131,7 +151,7 @@ export function ReservationSummary() {
 
         {/* Total */}
         <div className="flex justify-between items-center">
-          <span className="text-lg font-semibold text-foreground">Total</span>
+          <span className="text-lg font-semibold text-foreground">{summary.total}</span>
           <div className="text-right">
             <span className="text-2xl font-bold text-foreground">${total.toFixed(2)}</span>
             <span className="text-sm text-muted-foreground ml-1">USD</span>
@@ -142,11 +162,11 @@ export function ReservationSummary() {
         <div className="pt-4 space-y-2">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <Shield className="h-4 w-4 text-emerald-500" />
-            <span>Pago cifrado 100% seguro con SSL</span>
+            <span>{t.checkout.encryptedSSL}</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <Leaf className="h-4 w-4 text-emerald-500" />
-            <span>Contribuyes al turismo sostenible</span>
+            <span>{t.checkout.sustainableTourism}</span>
           </div>
         </div>
       </CardContent>
