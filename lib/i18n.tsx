@@ -56,6 +56,7 @@ export const translations = {
       customNeed: "¿Necesitas algo personalizado? Creamos experiencias a medida para grupos y empresas.",
       requestQuote: "Solicitar Cotización Personalizada",
       mostPopular: "Más Popular",
+      viewDetails: "Ver Detalles",
       cards: [
         {
           id: "inmersion-colonial",
@@ -388,6 +389,7 @@ export const translations = {
       customNeed: "Need something custom? We create tailored experiences for groups and companies.",
       requestQuote: "Request Custom Quote",
       mostPopular: "Most Popular",
+      viewDetails: "View Details",
       cards: [
         {
           id: "inmersion-colonial",

@@ -1,6 +1,6 @@
 "use client"
 
-import { Check, Leaf, CalendarCheck, Church, UtensilsCrossed, Mountain, Star, Users, Clock, MapPin } from "lucide-react"
+import { Check, Leaf, CalendarCheck, Church, UtensilsCrossed, Mountain, Star, Users, Clock, MapPin, Info } from "lucide-react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { SafeLink as Link } from "@/components/safe-link"
@@ -146,7 +146,14 @@ export function ExperienceComparator() {
                   </ul>
                 </CardContent>
 
-                <CardFooter className="pt-4">
+                <CardFooter className="pt-4 flex flex-col gap-2">
+                  <Link 
+                    href={`/experiencias/${card.id}`}
+                    className="w-full h-10 inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors border border-terracotta-300 text-terracotta-600 hover:bg-terracotta-50"
+                  >
+                    <Info className="h-4 w-4" />
+                    {exp.viewDetails}
+                  </Link>
                   <Link 
                     href="/checkout"
                     className="w-full h-10 inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors bg-primary hover:bg-primary/80 text-white"
