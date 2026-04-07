@@ -1,7 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
-import { SafeLink as Link } from "@/components/safe-link"
+import { useState } from "react"
 import { Search, MapPin, Clock, Compass, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useI18n } from "@/lib/i18n"
@@ -44,12 +43,12 @@ export function Hero() {
   const { t } = useI18n()
   const h = t.hero
 
-  const exploreHref = useMemo(() => {
-    const params = new URLSearchParams()
-    if (experienceType) params.set("tipo", experienceType)
-    if (duration) params.set("duracion", duration)
-    return `/experiencias${params.toString() ? `?${params.toString()}` : ""}`
-  }, [experienceType, duration])
+  const handleExplore = () => {
+    const element = document.getElementById("experiencias")
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" })
+    }
+  }
 
   return (
     <section className="relative min-h-screen flex flex-col">
@@ -126,13 +125,13 @@ export function Hero() {
 
               {/* CTA Button */}
               <div className="flex items-end">
-                <Link
-                  href={exploreHref}
+                <button
+                  onClick={handleExplore}
                   className="w-full h-12 inline-flex items-center justify-center gap-2 rounded-lg bg-gold-600 hover:bg-gold-700 text-white text-base font-semibold transition-all shadow-md hover:shadow-lg"
                 >
                   <Search className="w-5 h-5" />
                   {h.cta}
-                </Link>
+                </button>
               </div>
             </div>
           </div>

@@ -36,7 +36,7 @@ export const translations = {
       durationOptions: [
         { value: "fin-de-semana", label: "Fin de semana" },
         { value: "semana-completa", label: "Semana completa" },
-        { value: "nomada-digital", label: "Nómada Digital" },
+        { value: "nomada-digital", label: "Nómada Digital (1 mes+)" },
       ],
     },
     // Experience Comparator
@@ -502,7 +502,7 @@ export const translations = {
       durationOptions: [
         { value: "fin-de-semana", label: "Weekend" },
         { value: "semana-completa", label: "Full week" },
-        { value: "nomada-digital", label: "Digital Nomad" },
+        { value: "nomada-digital", label: "Digital Nomad (1 month+)" },
       ],
     },
     // Experience Comparator

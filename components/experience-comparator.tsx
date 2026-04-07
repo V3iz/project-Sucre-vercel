@@ -60,7 +60,7 @@ export function ExperienceComparator() {
   }
 
   return (
-    <section className="py-24 bg-light-gray">
+    <section className="py-24 bg-light-gray" id="experiencias">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16">
