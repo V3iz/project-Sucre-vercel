@@ -176,13 +176,13 @@ export function ExperienceComparator() {
                   </ul>
 
                   {/* Activity Details Accordion */}
-                  <Accordion type="single" collapsible className="mt-4 border border-cream-200 rounded-lg overflow-hidden">
+                  <Accordion type="single" collapsible className="mt-5 rounded-xl border border-terracotta-200 overflow-hidden">
                     <AccordionItem value="details" className="border-0">
-                      <AccordionTrigger className="px-4 py-3 text-sm font-medium text-terracotta-600 hover:text-terracotta-700 hover:no-underline hover:bg-terracotta-50 transition-colors rounded-t-lg data-[state=open]:rounded-b-none">
+                      <AccordionTrigger className="px-4 py-3 text-sm font-semibold text-terracotta-600 hover:text-terracotta-700 hover:no-underline hover:bg-terracotta-50 bg-terracotta-50/50 transition-colors">
                         {exp.activityDetailsLabel}
                       </AccordionTrigger>
-                      <AccordionContent className="px-4 pb-4 bg-cream-50">
-                        <p className="text-sm text-wood-600 leading-relaxed">
+                      <AccordionContent className="bg-cream-50">
+                        <p className="px-4 pb-4 text-sm text-wood-600 leading-relaxed">
                           {exp.activityDetailsContent[index]}
                         </p>
                       </AccordionContent>
