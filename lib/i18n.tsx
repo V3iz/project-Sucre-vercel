@@ -450,7 +450,7 @@ export const translations = {
         button: "Suscribirme",
         successMessage: "¡Gracias! Te hemos añadido a nuestra lista.",
       },
-      copyright: "© 2025 Descubre Sucre. Todos los derechos reservados.",
+      copyright: "© 2026 Descubre Sucre. Todos los derechos reservados.",
     },
     // Common
     common: {
@@ -916,7 +916,7 @@ export const translations = {
         button: "Subscribe",
         successMessage: "Thank you! You have been added to our list.",
       },
-      copyright: "© 2025 Discover Sucre. All rights reserved.",
+      copyright: "© 2026 Discover Sucre. All rights reserved.",
     },
     // Common
     common: {
