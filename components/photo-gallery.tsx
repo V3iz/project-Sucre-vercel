@@ -17,26 +17,26 @@ export function PhotoGallery() {
   const g = t.gallery
 
   return (
-    <section className="py-20 bg-cream-50">
+    <section className="py-24 bg-white">
       <div className="container mx-auto px-6 max-w-6xl">
 
         {/* Header */}
-        <div className="flex flex-col items-center text-center gap-3 mb-12">
-          <span className="font-body text-xs font-semibold tracking-widest uppercase text-terracotta-600 bg-terracotta-50 border border-terracotta-200 px-4 py-1.5 rounded-full">
+        <div className="flex flex-col items-center text-center gap-3 mb-16">
+          <span className="font-body text-xs font-semibold tracking-widest uppercase text-gold-700 bg-gold-50 border border-gold-200 px-4 py-1.5 rounded-full">
             {g.badge}
           </span>
           <h2 className="font-sans text-3xl md:text-4xl font-bold text-wood-800 text-balance max-w-2xl">
             {g.title}
           </h2>
-          <p className="font-body text-base text-wood-500 max-w-xl leading-relaxed">
+          <p className="font-body text-base text-wood-600 max-w-xl leading-relaxed">
             {g.subtitle}
           </p>
         </div>
 
         {/* Masonry-style grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
           {/* Row 1: large | tall | normal */}
-          <div className="relative col-span-1 row-span-2 rounded-2xl overflow-hidden group aspect-[3/4] md:aspect-auto md:h-[420px]">
+          <div className="relative col-span-1 row-span-2 rounded-xl overflow-hidden group aspect-[3/4] md:aspect-auto md:h-[420px] shadow-lg hover:shadow-xl transition-shadow duration-300">
             <Image
               src={imageSrcs[0]}
               alt={g.images[0].alt}
@@ -49,7 +49,7 @@ export function PhotoGallery() {
             </div>
           </div>
 
-          <div className="relative rounded-2xl overflow-hidden group aspect-[4/3]">
+          <div className="relative rounded-xl overflow-hidden group aspect-[4/3] shadow-lg hover:shadow-xl transition-shadow duration-300">
             <Image
               src={imageSrcs[1]}
               alt={g.images[1].alt}
@@ -62,7 +62,7 @@ export function PhotoGallery() {
             </div>
           </div>
 
-          <div className="relative rounded-2xl overflow-hidden group aspect-[4/3]">
+          <div className="relative rounded-xl overflow-hidden group aspect-[4/3] shadow-lg hover:shadow-xl transition-shadow duration-300">
             <Image
               src={imageSrcs[2]}
               alt={g.images[2].alt}
@@ -76,7 +76,7 @@ export function PhotoGallery() {
           </div>
 
           {/* Row 2: (first col spans) | wide landscape | portrait */}
-          <div className="relative rounded-2xl overflow-hidden group aspect-[4/3]">
+          <div className="relative rounded-xl overflow-hidden group aspect-[4/3] shadow-lg hover:shadow-xl transition-shadow duration-300">
             <Image
               src={imageSrcs[3]}
               alt={g.images[3].alt}
@@ -89,7 +89,7 @@ export function PhotoGallery() {
             </div>
           </div>
 
-          <div className="relative rounded-2xl overflow-hidden group aspect-[4/3]">
+          <div className="relative rounded-xl overflow-hidden group aspect-[4/3] shadow-lg hover:shadow-xl transition-shadow duration-300">
             <Image
               src={imageSrcs[4]}
               alt={g.images[4].alt}
@@ -102,7 +102,7 @@ export function PhotoGallery() {
             </div>
           </div>
 
-          <div className="relative rounded-2xl overflow-hidden group aspect-[4/3]">
+          <div className="relative rounded-xl overflow-hidden group aspect-[4/3] shadow-lg hover:shadow-xl transition-shadow duration-300">
             <Image
               src={imageSrcs[5]}
               alt={g.images[5].alt}

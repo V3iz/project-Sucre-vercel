@@ -84,6 +84,33 @@
   --cream-300: oklch(0.90 0.015 85);
   --cream-400: oklch(0.85 0.012 85);
   --cream-500: oklch(0.80 0.010 85);
+
+  /* Gold palette (#C5A028) */
+  --gold-50: #FAF5EF;
+  --gold-100: #F5ECDF;
+  --gold-200: #EFE0C5;
+  --gold-300: #E8D4AA;
+  --gold-400: #D8BE52;
+  --gold-500: #C5A028;
+  --gold-600: #B8912A;
+  --gold-700: #9E7924;
+  --gold-800: #6B561C;
+  --gold-900: #473A14;
+
+  /* Sky Blue palette (#D4EAF7) */
+  --sky-50: #FAFCFF;
+  --sky-100: #F0F7FE;
+  --sky-200: #D4EAF7;
+  --sky-300: #B3DDF0;
+  --sky-400: #7BC8E8;
+  --sky-500: #4BA8DC;
+  --sky-600: #3490C8;
+  --sky-700: #2372B5;
+  --sky-800: #1A4D70;
+  --sky-900: #0F2E42;
+
+  /* Light gray background (#F5F5F5) */
+  --light-gray: #F5F5F5;
 }
 
 .dark {
@@ -191,6 +218,30 @@
   --color-cream-300: var(--cream-300);
   --color-cream-400: var(--cream-400);
   --color-cream-500: var(--cream-500);
+
+  --color-gold-50: var(--gold-50);
+  --color-gold-100: var(--gold-100);
+  --color-gold-200: var(--gold-200);
+  --color-gold-300: var(--gold-300);
+  --color-gold-400: var(--gold-400);
+  --color-gold-500: var(--gold-500);
+  --color-gold-600: var(--gold-600);
+  --color-gold-700: var(--gold-700);
+  --color-gold-800: var(--gold-800);
+  --color-gold-900: var(--gold-900);
+
+  --color-sky-50: var(--sky-50);
+  --color-sky-100: var(--sky-100);
+  --color-sky-200: var(--sky-200);
+  --color-sky-300: var(--sky-300);
+  --color-sky-400: var(--sky-400);
+  --color-sky-500: var(--sky-500);
+  --color-sky-600: var(--sky-600);
+  --color-sky-700: var(--sky-700);
+  --color-sky-800: var(--sky-800);
+  --color-sky-900: var(--sky-900);
+
+  --color-light-gray: var(--light-gray);
 }
 
 @layer base {

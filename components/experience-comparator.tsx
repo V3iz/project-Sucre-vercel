@@ -60,30 +60,30 @@ export function ExperienceComparator() {
   }
 
   return (
-    <section className="py-20 bg-cream-50">
+    <section className="py-24 bg-light-gray">
       <div className="container mx-auto px-4">
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <Badge variant="outline" className="mb-4 border-terracotta-300 text-terracotta-600">
+        <div className="text-center mb-16">
+          <Badge variant="outline" className="mb-4 border-gold-300 text-gold-700 bg-gold-50">
             {exp.badge}
           </Badge>
-          <h2 className="text-3xl md:text-4xl font-bold text-wood-800 mb-4">
+          <h2 className="font-sans text-3xl md:text-4xl font-bold text-wood-800 mb-4">
             {exp.title}
           </h2>
-          <p className="text-lg text-wood-600 max-w-2xl mx-auto">
+          <p className="font-body text-lg text-wood-600 max-w-2xl mx-auto">
             {exp.description}
           </p>
         </div>
 
         {/* Trust Badges */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          <div className="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full border border-emerald-200">
+        <div className="flex flex-wrap justify-center gap-4 mb-16">
+          <div className="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full border border-emerald-200 shadow-sm">
             <Leaf className="h-4 w-4" />
-            <span className="text-sm font-medium">{exp.sustainability}</span>
+            <span className="font-body text-sm font-medium">{exp.sustainability}</span>
           </div>
-          <div className="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full border border-blue-200">
+          <div className="flex items-center gap-2 bg-sky-50 text-sky-700 px-4 py-2 rounded-full border border-sky-200 shadow-sm">
             <CalendarCheck className="h-4 w-4" />
-            <span className="text-sm font-medium">{exp.flexibleBooking}</span>
+            <span className="font-body text-sm font-medium">{exp.flexibleBooking}</span>
           </div>
         </div>
 
@@ -94,13 +94,13 @@ export function ExperienceComparator() {
             return (
               <Card 
                 key={card.id} 
-                className={`relative flex flex-col bg-background border-2 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
-                  isPopular ? "border-terracotta-400 shadow-lg" : "border-cream-200"
+                className={`relative flex flex-col bg-white rounded-xl border-0 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 ${
+                  isPopular ? "" : ""
                 }`}
               >
                 {isPopular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-terracotta-500 hover:bg-terracotta-500 text-white shadow-md">
+                    <Badge className="bg-gold-600 hover:bg-gold-700 text-white shadow-md">
                       {exp.mostPopular}
                     </Badge>
                   </div>
@@ -108,17 +108,17 @@ export function ExperienceComparator() {
 
                 <CardHeader className="text-center pb-4">
                   {/* Category Badge */}
-                  <Badge variant="secondary" className={`w-fit mx-auto mb-3 ${categoryColors[card.category] || "bg-gray-100 text-gray-700"}`}>
+                  <Badge variant="secondary" className={`w-fit mx-auto mb-3 font-body ${categoryColors[card.category] || "bg-gray-100 text-gray-700"}`}>
                     {card.category}
                   </Badge>
 
                   {/* Icon */}
-                  <div className="mx-auto w-14 h-14 bg-terracotta-100 rounded-full flex items-center justify-center text-terracotta-600 mb-3">
+                  <div className="mx-auto w-16 h-16 bg-gold-100 rounded-full flex items-center justify-center text-gold-600 mb-3">
                     {icons[index]}
                   </div>
 
-                  <CardTitle className="text-xl text-wood-800">{card.name}</CardTitle>
-                  <CardDescription className="text-wood-600 text-sm leading-relaxed">
+                  <CardTitle className="font-sans text-xl text-wood-800">{card.name}</CardTitle>
+                  <CardDescription className="font-body text-wood-600 text-sm leading-relaxed">
                     {card.description}
                   </CardDescription>
                 </CardHeader>
@@ -138,17 +138,17 @@ export function ExperienceComparator() {
 
                   {/* Meta Info */}
                   <div className="grid grid-cols-2 gap-3 mb-6 text-sm">
-                    <div className="flex items-center gap-2 text-wood-600">
-                      <Clock className="h-4 w-4 text-terracotta-500" />
+                    <div className="flex items-center gap-2 text-wood-600 font-body">
+                      <Clock className="h-4 w-4 text-gold-600" />
                       <span>{card.duration}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-wood-600">
-                      <Users className="h-4 w-4 text-terracotta-500" />
+                    <div className="flex items-center gap-2 text-wood-600 font-body">
+                      <Users className="h-4 w-4 text-gold-600" />
                       <span>{card.groupSize}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-wood-600 col-span-2">
+                    <div className="flex items-center gap-2 text-wood-600 col-span-2 font-body">
                       <div className="flex items-center gap-1">
-                        <Star className="h-4 w-4 text-amber-400 fill-amber-400" />
+                        <Star className="h-4 w-4 text-gold-500 fill-gold-500" />
                         <span className="font-medium">{ratings[index]}</span>
                       </div>
                       <span className="text-wood-400">({reviewCounts[index]} {exp.reviews})</span>
@@ -176,13 +176,13 @@ export function ExperienceComparator() {
                   </ul>
 
                   {/* Activity Details Accordion */}
-                  <Accordion type="single" collapsible className="mt-5 rounded-xl border border-terracotta-200 overflow-hidden">
+                  <Accordion type="single" collapsible className="mt-5 rounded-xl border border-gold-200 overflow-hidden">
                     <AccordionItem value="details" className="border-0">
-                      <AccordionTrigger className="px-4 py-3 text-sm font-semibold text-terracotta-600 hover:text-terracotta-700 hover:no-underline hover:bg-terracotta-50 bg-terracotta-50/50 transition-colors">
+                      <AccordionTrigger className="px-4 py-3 text-sm font-semibold text-gold-700 hover:text-gold-800 hover:no-underline hover:bg-gold-50 bg-gold-50/50 transition-colors font-body">
                         {exp.activityDetailsLabel}
                       </AccordionTrigger>
                       <AccordionContent className="bg-cream-50">
-                        <p className="px-4 pb-4 text-sm text-wood-600 leading-relaxed">
+                        <p className="px-4 pb-4 text-sm text-wood-600 leading-relaxed font-body">
                           {exp.activityDetailsContent[index]}
                         </p>
                       </AccordionContent>
@@ -193,14 +193,14 @@ export function ExperienceComparator() {
                 <CardFooter className="pt-4 flex flex-col gap-2">
                   <Link 
                     href={`/experiencias/${card.id}`}
-                    className="w-full h-10 inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors border border-terracotta-300 text-terracotta-600 hover:bg-terracotta-50"
+                    className="w-full h-10 inline-flex items-center justify-center gap-2 rounded-lg text-sm font-medium transition-all border border-gold-300 text-gold-700 hover:bg-gold-50 font-body"
                   >
                     <Info className="h-4 w-4" />
                     {exp.viewDetails}
                   </Link>
                   <button 
                     onClick={() => handleBook(card, prices[index])}
-                    className="w-full h-10 inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors bg-primary hover:bg-primary/80 text-white"
+                    className="w-full h-10 inline-flex items-center justify-center gap-2 rounded-lg text-sm font-medium transition-all bg-gold-600 hover:bg-gold-700 text-white shadow-md hover:shadow-lg font-body"
                   >
                     {exp.bookNow}
                   </button>

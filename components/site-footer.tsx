@@ -31,19 +31,19 @@ export function SiteFooter() {
             </h3>
             <ul className="flex flex-col gap-3">
               <li className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-terracotta-400" strokeWidth={1.75} aria-hidden="true" />
+                <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-gold-500" strokeWidth={1.75} aria-hidden="true" />
                 <address className="font-body text-sm not-italic leading-relaxed whitespace-pre-line">
                   {f.contact.address}
                 </address>
               </li>
               <li className="flex items-center gap-3">
-                <Phone className="w-4 h-4 shrink-0 text-terracotta-400" strokeWidth={1.75} aria-hidden="true" />
+                <Phone className="w-4 h-4 shrink-0 text-gold-500" strokeWidth={1.75} aria-hidden="true" />
                 <a href={`tel:${f.contact.phone}`} className="font-body text-sm hover:text-white transition-colors">
                   {f.contact.phone}
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="w-4 h-4 shrink-0 text-terracotta-400" strokeWidth={1.75} aria-hidden="true" />
+                <Mail className="w-4 h-4 shrink-0 text-gold-500" strokeWidth={1.75} aria-hidden="true" />
                 <a href={`mailto:${f.contact.email}`} className="font-body text-sm hover:text-white transition-colors">
                   {f.contact.email}
                 </a>
@@ -63,7 +63,7 @@ export function SiteFooter() {
                     href={item.href}
                     className="font-body text-sm hover:text-white hover:translate-x-1 transition-all duration-200 inline-flex items-center gap-1.5 group"
                   >
-                    <span className="w-1 h-1 rounded-full bg-terracotta-500 group-hover:bg-terracotta-400 shrink-0" aria-hidden="true" />
+                    <span className="w-1 h-1 rounded-full bg-gold-600 group-hover:bg-gold-500 shrink-0" aria-hidden="true" />
                     {item.label}
                   </Link>
                 </li>
@@ -90,7 +90,7 @@ export function SiteFooter() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:border-terracotta-500 hover:bg-terracotta-500/10 hover:text-terracotta-400 transition-all duration-200"
+                  className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:border-gold-500 hover:bg-gold-500/10 hover:text-gold-400 transition-all duration-200"
                 >
                   <Icon className="w-4 h-4" strokeWidth={1.75} aria-hidden="true" />
                 </a>
@@ -105,7 +105,7 @@ export function SiteFooter() {
             </h3>
             <p className="font-body text-sm leading-relaxed">{f.newsletter.description}</p>
             {subscribed ? (
-              <p className="font-body text-sm text-terracotta-400 font-medium">
+              <p className="font-body text-sm text-gold-400 font-medium">
                 {f.newsletter.successMessage}
               </p>
             ) : (
@@ -116,11 +116,11 @@ export function SiteFooter() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={f.newsletter.placeholder}
                   required
-                  className="font-body text-sm bg-white/10 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder:text-white/40 focus:outline-none focus:border-terracotta-500 focus:ring-1 focus:ring-terracotta-500 transition-colors"
+                  className="font-body text-sm bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-white placeholder:text-white/40 focus:outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 transition-colors"
                 />
                 <button
                   type="submit"
-                  className="font-body text-sm font-semibold bg-terracotta-500 hover:bg-terracotta-600 text-white rounded-lg px-4 py-2.5 transition-colors duration-200"
+                  className="font-body text-sm font-semibold bg-gold-600 hover:bg-gold-700 text-white rounded-xl px-4 py-2.5 transition-all duration-200 shadow-md hover:shadow-lg"
                 >
                   {f.newsletter.button}
                 </button>
