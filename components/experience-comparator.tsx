@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge"
 import { SafeLink as Link } from "@/components/safe-link"
 import { BookingModal } from "@/components/booking-modal"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { useI18n } from "@/lib/i18n"
 
 const icons = [
@@ -173,6 +174,20 @@ export function ExperienceComparator() {
                       </li>
                     ))}
                   </ul>
+
+                  {/* Activity Details Accordion */}
+                  <Accordion type="single" collapsible className="mt-4 border border-cream-200 rounded-lg overflow-hidden">
+                    <AccordionItem value="details" className="border-0">
+                      <AccordionTrigger className="px-4 py-3 text-sm font-medium text-terracotta-600 hover:text-terracotta-700 hover:no-underline hover:bg-terracotta-50 transition-colors rounded-t-lg data-[state=open]:rounded-b-none">
+                        {exp.activityDetailsLabel}
+                      </AccordionTrigger>
+                      <AccordionContent className="px-4 pb-4 bg-cream-50">
+                        <p className="text-sm text-wood-600 leading-relaxed">
+                          {exp.activityDetailsContent[index]}
+                        </p>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 </CardContent>
 
                 <CardFooter className="pt-4 flex flex-col gap-2">

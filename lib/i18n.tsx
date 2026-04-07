@@ -57,6 +57,12 @@ export const translations = {
       requestQuote: "Solicitar Cotización Personalizada",
       mostPopular: "Más Popular",
       viewDetails: "Ver Detalles",
+      activityDetailsLabel: "Ver detalles de la actividad",
+      activityDetailsContent: [
+        "El recorrido comienza a las 9:00 h con la recogida en tu alojamiento. Visitaremos la Plaza 25 de Mayo, la Catedral Metropolitana y el Convento de San Felipe Neri, donde disfrutarás de vistas panorámicas únicas de la ciudad. A continuación, nos adentramos en el mercado artesanal de la calle Ravelo y participamos en un taller de tejido con maestras locales. El almuerzo se sirve en un restaurante típico del centro histórico, con platos como el pique macho y la sopa de maní. Por la tarde visitamos la Casa de la Libertad y finalizamos con un paseo por el Parque Bolívar. Regreso al alojamiento aproximadamente a las 18:00 h.",
+        "La experiencia gastronómica arranca con un desayuno de bienvenida en el Mercado Central, degustando salteñas recién horneadas y api con pastel. Seguimos hacia las chocolaterías artesanales del centro, donde aprenderás el proceso del cacao hasta la tableta. A mediodía, clase de cocina boliviana en un espacio culinario local: prepararás majadito, picana y buñuelos. La tarde incluye visita a bodegas locales con cata de singani y vinos de Tarija. Cada parada incluye pequeñas degustaciones guiadas. Finalizamos en la feria gastronómica de la plaza para cerrar con anticuchos y chicha morada.",
+        "Salida a las 7:00 h desde Sucre hacia el cráter de Maragua en vehículo 4x4. Tras 2 horas de camino, llegamos al mirador principal con vistas al cráter geológico de 8 km de diámetro. Comenzamos el sendero guiado de 8 km atravesando formaciones rocosas multicolores y campos de cultivo andinos. A mitad del trayecto, visita al sitio paleontológico con huellas de dinosaurios del Cretácico. El almuerzo comunitario lo prepara una familia local: sopa de quinua, chuño frito y chicha tradicional. Regresamos a Sucre al caer la tarde, con parada opcional en la comunidad de Potolo para ver tejidos jalq'a.",
+      ],
       cards: [
         {
           id: "inmersion-colonial",
@@ -346,6 +352,28 @@ export const translations = {
         downloadPDF: "Descargar PDF",
       },
     },
+    // Value Proposition
+    valueProposition: {
+      title: "¿Por qué Sucre?: Cuatro razones por las que la Ciudad Blanca nunca se te olvida",
+      reasons: [
+        {
+          title: "Patrimonio de la Humanidad",
+          description: "Arquitectura colonial única en el mundo.",
+        },
+        {
+          title: "Historia Profunda",
+          description: "Camina entre huellas reales de dinosaurios.",
+        },
+        {
+          title: "Clima Ideal",
+          description: "20°C promedio durante todo el año.",
+        },
+        {
+          title: "Calidad Accesible",
+          description: "Alto valor turístico a un precio competitivo.",
+        },
+      ],
+    },
     // Common
     common: {
       loading: "Cargando...",
@@ -417,6 +445,12 @@ export const translations = {
       requestQuote: "Request Custom Quote",
       mostPopular: "Most Popular",
       viewDetails: "View Details",
+      activityDetailsLabel: "View activity details",
+      activityDetailsContent: [
+        "The tour begins at 9:00 AM with pick-up at your accommodation. We will visit Plaza 25 de Mayo, the Metropolitan Cathedral and the Convent of San Felipe Neri, where you will enjoy unique panoramic views of the city. Next, we head into the artisan market on Ravelo Street and participate in a weaving workshop with local master weavers. Lunch is served at a traditional restaurant in the historic center, featuring dishes such as pique macho and peanut soup. In the afternoon we visit the Casa de la Libertad and finish with a stroll through Parque Bolívar. Return to accommodation at approximately 6:00 PM.",
+        "The gastronomic experience starts with a welcome breakfast at the Central Market, tasting freshly baked salteñas and api with pastel. We continue to the artisan chocolate shops in the city center, where you will learn the process from cacao to chocolate bar. At midday, a Bolivian cooking class in a local culinary space: you will prepare majadito, picana and buñuelos. The afternoon includes a visit to local wineries with singani and Tarija wine tastings. Each stop includes small guided tastings. We finish at the gastronomic fair on the plaza, closing with anticuchos and chicha morada.",
+        "Departure at 7:00 AM from Sucre towards the Maragua crater in a 4x4 vehicle. After 2 hours of driving, we reach the main viewpoint overlooking the 8-km geological crater. We begin the 8-km guided trail through multicolored rock formations and Andean farmland. Halfway through, we visit the paleontological site with Cretaceous dinosaur footprints. The community lunch is prepared by a local family: quinoa soup, fried chuño and traditional chicha. We return to Sucre at dusk, with an optional stop at the Potolo community to see jalq'a textiles.",
+      ],
       cards: [
         {
           id: "inmersion-colonial",
@@ -705,6 +739,28 @@ export const translations = {
         backHome: "Back to Home",
         downloadPDF: "Download PDF",
       },
+    },
+    // Value Proposition
+    valueProposition: {
+      title: "Why Sucre?: Four reasons the White City stays with you forever",
+      reasons: [
+        {
+          title: "World Heritage Site",
+          description: "Unique colonial architecture found nowhere else on earth.",
+        },
+        {
+          title: "Deep History",
+          description: "Walk among real dinosaur footprints.",
+        },
+        {
+          title: "Ideal Climate",
+          description: "20°C average temperature all year round.",
+        },
+        {
+          title: "Accessible Quality",
+          description: "High tourist value at a competitive price.",
+        },
+      ],
     },
     // Common
     common: {
