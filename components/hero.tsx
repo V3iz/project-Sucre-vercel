@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Search, MapPin, Clock, Compass, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useI18n } from "@/lib/i18n"
@@ -40,10 +40,16 @@ function NativeSelect({
 export function Hero() {
   const [experienceType, setExperienceType] = useState("")
   const [duration, setDuration] = useState("")
+  const [isHydrated, setIsHydrated] = useState(false)
   const { t } = useI18n()
   const h = t.hero
 
+  useEffect(() => {
+    setIsHydrated(true)
+  }, [])
+
   const handleExplore = () => {
+    if (!isHydrated) return
     const element = document.getElementById("experiencias")
     if (element) {
       element.scrollIntoView({ behavior: "smooth" })
