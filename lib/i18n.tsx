@@ -374,6 +374,84 @@ export const translations = {
         },
       ],
     },
+    // Gallery
+    gallery: {
+      badge: "Galería Visual",
+      title: "Descubre Sucre",
+      subtitle: "Un vistazo a la magia de la Ciudad Blanca: su arquitectura, su gente, su sabor y su naturaleza.",
+      images: [
+        { alt: "Plaza principal de Sucre con arquitectura colonial blanca", caption: "Plaza 25 de Mayo" },
+        { alt: "Iglesia colonial histórica de Sucre al amanecer", caption: "Catedral Metropolitana" },
+        { alt: "Gastronomía andina boliviana, salteñas y platos típicos", caption: "Gastronomía Local" },
+        { alt: "Paisaje natural de los valles y montañas alrededor de Sucre", caption: "Naturaleza Andina" },
+        { alt: "Detalle de tejidos artesanales y textiles bolivianos coloridos", caption: "Artesanía Boliviana" },
+        { alt: "Calles empedradas del centro histórico de Sucre", caption: "Centro Histórico" },
+      ],
+    },
+    // Testimonials
+    testimonials: {
+      badge: "Lo Que Dicen los Viajeros",
+      title: "Experiencias Reales, Recuerdos para Siempre",
+      subtitle: "Más de 2.400 viajeros ya descubrieron el encanto único de la Ciudad Blanca.",
+      reviews: [
+        {
+          text: "Sucre es súper segura y sus calles coloniales tienen una energía única. Me enamoré de cada rincón. El tour histórico superó todas mis expectativas.",
+          name: "Valentina Ríos",
+          country: "Argentina",
+          experience: "Inmersión Colonial",
+        },
+        {
+          text: "Comí las mejores salteñas de mi vida aquí. La experiencia gastronómica fue increíble: conocí la cocina boliviana auténtica de una manera muy especial.",
+          name: "Marc Dubois",
+          country: "Francia",
+          experience: "Ruta Gastronómica",
+        },
+        {
+          text: "Caminar sobre huellas de dinosaurios reales fue algo que no olvidaré jamás. Una experiencia completamente única que no encontrarás en ningún otro lugar.",
+          name: "Sarah Johnson",
+          country: "Estados Unidos",
+          experience: "Aventura Maragua",
+        },
+        {
+          text: "El clima perfecto, la gente cálida y el nivel turístico a un precio honesto. Sucre es el secreto mejor guardado de Sudamérica. Ya estoy planeando volver.",
+          name: "Dieter Müller",
+          country: "Alemania",
+          experience: "Inmersión Colonial",
+        },
+      ],
+    },
+    // Footer
+    footer: {
+      contact: {
+        title: "Contacto",
+        address: "Calle Aniceto Arce 87, Centro Histórico\nSucre, Bolivia",
+        phone: "+591 4 645 0000",
+        email: "hola@descubresucre.com",
+      },
+      links: {
+        title: "Enlaces Útiles",
+        items: [
+          { label: "Experiencias", href: "/experiencias" },
+          { label: "Tours Guiados", href: "/tours" },
+          { label: "Alojamiento", href: "/alojamiento" },
+          { label: "Gastronomía", href: "/gastronomia" },
+          { label: "Blog de Viajes", href: "/blog" },
+          { label: "Política de Privacidad", href: "/privacidad" },
+        ],
+      },
+      social: {
+        title: "Redes Sociales",
+        followUs: "Síguenos y sé parte de nuestra comunidad viajera.",
+      },
+      newsletter: {
+        title: "Newsletter",
+        description: "Recibe inspiración de viaje, ofertas exclusivas y guías de Sucre directamente en tu bandeja.",
+        placeholder: "Tu correo electrónico",
+        button: "Suscribirme",
+        successMessage: "¡Gracias! Te hemos añadido a nuestra lista.",
+      },
+      copyright: "© 2025 Descubre Sucre. Todos los derechos reservados.",
+    },
     // Common
     common: {
       loading: "Cargando...",
@@ -761,6 +839,84 @@ export const translations = {
           description: "High tourist value at a competitive price.",
         },
       ],
+    },
+    // Gallery
+    gallery: {
+      badge: "Visual Gallery",
+      title: "Discover Sucre",
+      subtitle: "A glimpse into the magic of the White City: its architecture, people, flavours and nature.",
+      images: [
+        { alt: "Main square of Sucre with white colonial architecture", caption: "Plaza 25 de Mayo" },
+        { alt: "Historic colonial church in Sucre at dawn", caption: "Metropolitan Cathedral" },
+        { alt: "Andean Bolivian gastronomy, salteñas and typical dishes", caption: "Local Gastronomy" },
+        { alt: "Natural landscape of valleys and mountains around Sucre", caption: "Andean Nature" },
+        { alt: "Detail of colourful Bolivian artisanal textiles and weaving", caption: "Bolivian Crafts" },
+        { alt: "Cobblestone streets of the historic centre of Sucre", caption: "Historic Centre" },
+      ],
+    },
+    // Testimonials
+    testimonials: {
+      badge: "What Travellers Say",
+      title: "Real Experiences, Memories That Last Forever",
+      subtitle: "Over 2,400 travellers have already discovered the unique charm of the White City.",
+      reviews: [
+        {
+          text: "Sucre is incredibly safe and its colonial streets have a unique energy. I fell in love with every corner. The historical tour exceeded all my expectations.",
+          name: "Valentina Ríos",
+          country: "Argentina",
+          experience: "Colonial Immersion",
+        },
+        {
+          text: "I ate the best salteñas of my life here. The gastronomic experience was incredible — I discovered authentic Bolivian cuisine in a very special way.",
+          name: "Marc Dubois",
+          country: "France",
+          experience: "Gastronomy Tour",
+        },
+        {
+          text: "Walking on real dinosaur footprints was something I will never forget. A completely unique experience you won't find anywhere else in the world.",
+          name: "Sarah Johnson",
+          country: "United States",
+          experience: "Maragua Adventure",
+        },
+        {
+          text: "Perfect weather, warm people and a high tourist standard at an honest price. Sucre is South America's best kept secret. I'm already planning to return.",
+          name: "Dieter Müller",
+          country: "Germany",
+          experience: "Colonial Immersion",
+        },
+      ],
+    },
+    // Footer
+    footer: {
+      contact: {
+        title: "Contact",
+        address: "Calle Aniceto Arce 87, Historic Centre\nSucre, Bolivia",
+        phone: "+591 4 645 0000",
+        email: "hello@discoversucre.com",
+      },
+      links: {
+        title: "Useful Links",
+        items: [
+          { label: "Experiences", href: "/experiencias" },
+          { label: "Guided Tours", href: "/tours" },
+          { label: "Accommodation", href: "/alojamiento" },
+          { label: "Gastronomy", href: "/gastronomia" },
+          { label: "Travel Blog", href: "/blog" },
+          { label: "Privacy Policy", href: "/privacidad" },
+        ],
+      },
+      social: {
+        title: "Social Media",
+        followUs: "Follow us and become part of our travel community.",
+      },
+      newsletter: {
+        title: "Newsletter",
+        description: "Receive travel inspiration, exclusive deals and Sucre guides straight to your inbox.",
+        placeholder: "Your email address",
+        button: "Subscribe",
+        successMessage: "Thank you! You have been added to our list.",
+      },
+      copyright: "© 2025 Discover Sucre. All rights reserved.",
     },
     // Common
     common: {

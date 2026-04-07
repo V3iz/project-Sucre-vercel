@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Playfair_Display, Inter } from 'next/font/google'
 import { Navigation } from '@/components/navigation'
+import { SiteFooter } from '@/components/site-footer'
 import { I18nProvider } from '@/lib/i18n'
 import './globals.css'
 
@@ -57,6 +58,7 @@ export default function RootLayout({
         <I18nProvider>
           <Navigation />
           {children}
+          <SiteFooter />
         </I18nProvider>
       </body>
     </html>
